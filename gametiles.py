@@ -127,10 +127,10 @@ def waterGen(T, percent, id):
         chanceGen = random.randint(0, 100)
         if chanceGen in [x for x in range(0,percent)]:
             waterGen(newT,percent-WATERPERCENTDECLINE, id)
-            if id in BLOCKCOUPLER.keys():
-                BLOCKCOUPLER[id].append(T)
-            else:
-                BLOCKCOUPLER[id] = [T]
+            # if id in BLOCKCOUPLER.keys():
+            #     BLOCKCOUPLER[id].append(T)
+            # else:
+            #     BLOCKCOUPLER[id] = [T]
     return True
 
 

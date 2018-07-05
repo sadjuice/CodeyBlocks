@@ -5,11 +5,10 @@ pygame.init()
 clock = pygame.time.Clock()
 
 player = spritesrc.MainPlayer
-# (0,0), pygame.FULLSCREEN
-DISPLAYSURF = pygame.display.set_mode((712, 512))
+# (712, 512)
+DISPLAYSURF = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 
 displaywidth, displayheight = pygame.display.get_surface().get_size()
-
 
 pygame.display.set_caption('Codey Blocks')
 TestText = pygame.font.SysFont("Comic Sans MS",16)
