@@ -1,4 +1,4 @@
-import gametiles
+import gametiles, inventory
 
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
@@ -11,6 +11,7 @@ class Player():
     def __init__(self):
         self.xpos = 0
         self.ypos = 0
+        self.inv = inventory.Inventory()
 
     def checkPos(self, x, y):
         if x//16 >= gametiles.TILEWIDTH or y//16 >= gametiles.TILEHEIGHT:
@@ -31,6 +32,11 @@ class Player():
             if self.checkPos(self.ypos+PLAYER_SPEED, self.ypos):    self.ypos += PLAYER_SPEED
 
     def getPos(self):   return self.xpos, self.ypos
+
+    def grabTile(self):
+        inv = self.inv
+        tile = gametiles.getActiveTile(self.xpos,self.ypos)
+        inv.addItem(tile.blockid, 1)
 
 MainPlayer = Player()
 

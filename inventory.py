@@ -9,4 +9,12 @@ class Item():
 
 class Inventory():
     def __init__(self):
-        self.InventList = []
+        self.ItemList = {}
+
+    def addItem(self, itemID, quantity):
+        if itemID in self.ItemList.keys():
+            self.ItemList[itemID] += quantity
+        else:
+            self.ItemList[itemID] = quantity
+
+    def grabList(self): return self.ItemList
