@@ -20,7 +20,7 @@ PASTEY = (222,222,222)
 BLOCKLIST = {
     0       :   ["GRASS", "grass.png"],
     1       :   ["WATER", "water.png"],
-    2       :   ["CLOUD",    PASTEY],
+    2       :   ["SAND",    "sand.png"],
     100     :   ["VOID", BLACK]
 }
 
@@ -29,7 +29,6 @@ WATERPERCENTDECLINE = 15
 
 BLOCKCOUPLER = {
     #id : # [list of tiles that have that gen]
-
 }
 
 CLOUDSPEED = 16
@@ -72,6 +71,7 @@ WATERLIST = []
 #TILE INDEX
 #(BLOCKID, LOCATION)
 def initGenTile():
+    BLOCKCOUPLER = {}
     for y in range(0, TILEHEIGHT):
         for x in range(0,TILEWIDTH):
             generint = random.randint(0, 100)
@@ -80,12 +80,17 @@ def initGenTile():
     for i in range(0,random.randint(1,4)):
         Tile = TILEMAP[random.randint(0,TILEHEIGHT-1)][random.randint(0,TILEWIDTH-1)]
         waterGen(Tile, 100, 1)
-    # for i in range(0,1):
-    #     waterGen(CLOUDMAP[random.randint(0,TILEHEIGHT-1)][random.randint(0,TILEWIDTH-1)], 10, 2)
+    #Sandgen
+    if 1 in BLOCKCOUPLER.keys():
+        for Tile in set(BLOCKCOUPLER[1]):
+            sandlist = getSurrounding(Tile)
+            for Tile in sandlist:
+                if Tile.blockid == 0:
+                    Tile.setBlockID(2)
 
 def getActiveTile(x, y):
-    newx = x // 16
-    newy = y // 16
+    newx = x // TILESIZE
+    newy = y // TILESIZE
     Tile = TILEMAP[newy][newx]
     return Tile
 
@@ -96,8 +101,8 @@ def getSurrounding(tile):
 def getRowNeighbor(tile):
     #X-Axis
     #LEFT - LEFT, RIGHT - RIGHT
-    newx = tile.xpos // 16
-    newy = tile.ypos // 16
+    newx = tile.xpos // TILESIZE
+    newy = tile.ypos // TILESIZE
     l = []
     for x in [-1,1]:
         var = newx+x
@@ -109,8 +114,8 @@ def getRowNeighbor(tile):
 def getColumnNeighbor(tile):
     #Y-Axis
     # LEFT - ROW ABOVE, RIGHT - ROW BELOW
-    newx = tile.xpos // 16
-    newy = tile.ypos // 16
+    newx = tile.xpos // TILESIZE
+    newy = tile.ypos // TILESIZE
     l = []
     for y in [-1,1]:
         var = newy+y
@@ -127,10 +132,10 @@ def waterGen(T, percent, id):
         chanceGen = random.randint(0, 100)
         if chanceGen in [x for x in range(0,percent)]:
             waterGen(newT,percent-WATERPERCENTDECLINE, id)
-            # if id in BLOCKCOUPLER.keys():
-            #     BLOCKCOUPLER[id].append(T)
-            # else:
-            #     BLOCKCOUPLER[id] = [T]
+            if id in BLOCKCOUPLER.keys():
+                BLOCKCOUPLER[id].append(T)
+            else:
+                BLOCKCOUPLER[id] = [T]
     return True
 
 

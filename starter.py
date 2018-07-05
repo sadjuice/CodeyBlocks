@@ -5,8 +5,8 @@ pygame.init()
 clock = pygame.time.Clock()
 
 player = spritesrc.MainPlayer
-# (712, 512)
-DISPLAYSURF = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+# pygame.FULLSCREEN
+DISPLAYSURF = pygame.display.set_mode((712, 512) )
 
 displaywidth, displayheight = pygame.display.get_surface().get_size()
 
@@ -22,6 +22,7 @@ BLUE    =   (0,0,255)
 
 #MAP VARIABLES
 MAPGENERATED = 0
+TILESIZE = spritesrc.TILESIZE
 
 #TEXTURE MAP
 BLOCKLIST = gametiles.BLOCKLIST
@@ -37,11 +38,11 @@ def displayTile(TILE, x, y):
         try:
             DISPLAYSURF.blit(BLOCKTEXTURES[TILE.blockid], (x, y))
         except:
-            pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[TILE.blockid], (x, y, 16, 16))
+            pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[TILE.blockid], (x, y, TILESIZE, TILESIZE))
     elif isinstance(TILE, pygame.Surface):
         DISPLAYSURF.blit(TILE, (x, y))
     else:
-        pygame.draw.rect(DISPLAYSURF, TILE, (x, y, 16, 16))
+        pygame.draw.rect(DISPLAYSURF, TILE, (x, y, TILESIZE, TILESIZE))
 
 #PLAYER ANIMATION TEXTURES
 ANIMATIONIMAGE = {

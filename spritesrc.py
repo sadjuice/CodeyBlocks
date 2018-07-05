@@ -8,6 +8,7 @@ BLACK   =   (0,0,0)
 RED     =   (255,0,0)
 
 PLAYER_SPEED = 16
+TILESIZE = gametiles.TILESIZE
 
 class Player():
     def __init__(self):
@@ -16,7 +17,7 @@ class Player():
         self.inv = inventory.Inventory()
 
     def checkPos(self, x, y):
-        if x//16 >= gametiles.TILEWIDTH or y//16 >= gametiles.TILEHEIGHT:
+        if x//TILESIZE >= gametiles.TILEWIDTH or y//TILESIZE >= gametiles.TILEHEIGHT:
             return False
         elif x < 0 or y < 0:
             return False
