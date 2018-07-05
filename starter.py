@@ -2,18 +2,15 @@ import sys, spritesrc, gametiles, pygame, random
 from pygame.locals import *
 
 pygame.init()
+
+#PYGAME variables
 clock = pygame.time.Clock()
-
-player = spritesrc.MainPlayer
-# pygame.FULLSCREEN
-DISPLAYSURF = pygame.display.set_mode((712, 512) )
-
+DISPLAYSURF = pygame.display.set_mode((712, 512)) # pygame.FULLSCREEN
 displaywidth, displayheight = pygame.display.get_surface().get_size()
-
 pygame.display.set_caption('Codey Blocks')
 TestText = pygame.font.SysFont("Comic Sans MS",16)
-# pygame.key.set_repeat()
 
+#COLOUR PALETTE
 WHITE   =   (255,255,255)
 BLACK   =   (0,0,0)
 RED     =   (255,0,0)
@@ -23,26 +20,25 @@ BLUE    =   (0,0,255)
 #MAP VARIABLES
 MAPGENERATED = 0
 TILESIZE = spritesrc.TILESIZE
-
-#TEXTURE MAP
+TILEMAP = gametiles.TILEMAP
 BLOCKLIST = gametiles.BLOCKLIST
 BLOCKTEXTURES = {}
-for block in gametiles.BLOCKLIST.keys():
-    if isinstance(BLOCKLIST[block][1],str):
-        BLOCKTEXTURES[block] = pygame.image.load("images/blocks/"+BLOCKLIST[block][1])
-    else:
-        BLOCKTEXTURES[block] = BLOCKLIST[block][1]
 
-def displayTile(TILE, x, y):
-    if isinstance(TILE, gametiles.Tile):
+#TEXTURE MAP
+for block in gametiles.BLOCKLIST.keys():
+    if isinstance(BLOCKLIST[block][1],str): BLOCKTEXTURES[block] = pygame.image.load("images/blocks/"+BLOCKLIST[block][1])
+    else:   BLOCKTEXTURES[block] = BLOCKLIST[block][1]
+
+def displayTile(requestedDisplay, x, y):
+    if isinstance(requestedDisplay, gametiles.Tile):    #If request is a tile
         try:
-            DISPLAYSURF.blit(BLOCKTEXTURES[TILE.blockid], (x, y))
+            DISPLAYSURF.blit(BLOCKTEXTURES[requestedDisplay.blockid], (x, y))   #for textured tiles
         except:
-            pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[TILE.blockid], (x, y, TILESIZE, TILESIZE))
-    elif isinstance(TILE, pygame.Surface):
-        DISPLAYSURF.blit(TILE, (x, y))
+            pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[requestedDisplay.blockid], (x, y, TILESIZE, TILESIZE))  #for non-textured tiles
+    elif isinstance(requestedDisplay, pygame.Surface):
+        DISPLAYSURF.blit(requestedDisplay, (x, y))  #For images, and text
     else:
-        pygame.draw.rect(DISPLAYSURF, TILE, (x, y, TILESIZE, TILESIZE))
+        pygame.draw.rect(DISPLAYSURF, requestedDisplay, (x, y, TILESIZE, TILESIZE)) #For plain int.
 
 #PLAYER ANIMATION TEXTURES
 ANIMATIONIMAGE = {
@@ -51,27 +47,25 @@ ANIMATIONIMAGE = {
 }
 
 #PLAYER VARIABLES
-PMOVECALL = True #Is the player requested to move?
+player = spritesrc.MainPlayer
 MovementDelay = 0
 cloudDelay = 0
 PlayerImage = pygame.image.load("images/sprites/playSprite.png")
 
 #PLAYER GENERATOR
 def drawPlayer():
-    # pygame.draw.circle(DISPLAYSURF, RED, (player.xpos, player.ypos), 8, 8)
+    checkPlayerAnimation()
     DISPLAYSURF.blit(PlayerImage,(player.getPos()))
+
 def movePlayer(dir):
     global MovementDelay
-    if PMOVECALL:
-        if MovementDelay <= 4:
-            MovementDelay += 1
-        else:
-            player.move(dir)
-            MovementDelay = 0
+    if MovementDelay <= 4:  MovementDelay += 1
+    else:   
+        player.move(dir)
+        MovementDelay = 0
 
-TILEMAP = gametiles.TILEMAP
-BLOCKLIST = gametiles.BLOCKLIST
-
+"""
+#CLOUD TEST (Doesn't work)
 def cloudsTest():
     global cloudDelay
     for Tile in gametiles.BLOCKCOUPLER[2]:
@@ -82,30 +76,23 @@ def cloudsTest():
             cloudDelay = 0
     for Tile in gametiles.BLOCKCOUPLER[2]:
         displayTile(Tile, Tile.xpos, Tile.ypos)
+"""
 
 def checkPlayerAnimation():
     global PlayerImage
-    pos = player.getPos()
-    if player.checkPos(pos[0],pos[1]):
-        # print(pos[0]//16,pos[1]//16)
-
-        BLOCKID = gametiles.getActiveTile(pos[0],pos[1]).blockid
-        try:
-            PlayerImage = ANIMATIONIMAGE[BLOCKID]
-        except:
-            PlayerImage = ANIMATIONIMAGE[0]
-
+    x, y = player.getPos()
+    if player.checkPos(x,y):
+        BLOCKID = gametiles.getActiveTile(x,y).blockid
+        try:    PlayerImage = ANIMATIONIMAGE[BLOCKID]
+        except: PlayerImage = ANIMATIONIMAGE[0]
 
 #TILE GENERATOR
 def drawGameMap():
     global MAPGENERATED
-    #Checks if map has been generated
-    if MAPGENERATED == 0:
+    if MAPGENERATED == 0:   #Checks if map has been generated
         gametiles.initGenTile()
         MAPGENERATED = 1
-    #Draw tiles
-    for row in TILEMAP:
-        for TILE in row:    displayTile(TILE, TILE.xpos, TILE.ypos)
+    [[displayTile(TILE, TILE.xpos, TILE.ypos) for TILE in row] for row in TILEMAP]  #Draw tiles
 
 def drawInventory(): #Testing Inventories, may have to refactor later
     # RIGHT INVT MARGIN (10px) 522 y x 10
@@ -132,27 +119,21 @@ while True: # main game loop
             if event.key == pygame.K_m:
                 MAPGENERATED = 0
             if event.key == pygame.K_w:
-                pos = player.getPos()
-                TILE = gametiles.getActiveTile(pos[0],pos[1])
-                for Tile in gametiles.getSurrounding(TILE):
-                    Tile.setBlockID(100)
-            if event.key == pygame.K_SPACE:
-                player.grabTile()
-            if event.key == pygame.K_p:
-                player.placeTile()
+                x,y = player.getPos()
+                TILE = gametiles.getActiveTile(x,y)
+                for Tile in gametiles.getSurrounding(TILE): Tile.setBlockID(100)
+            if event.key == pygame.K_SPACE: player.grabTile()
+            if event.key == pygame.K_p: player.placeTile()
 
-    pressed = pygame.key.get_pressed()
     # player movements
+    pressed = pygame.key.get_pressed()
     if pressed[pygame.K_UP]:        movePlayer("up")
     elif pressed[pygame.K_RIGHT]:   movePlayer("right")
     elif pressed[pygame.K_LEFT]:    movePlayer("left")
     elif pressed[pygame.K_DOWN]:    movePlayer("down")
 
     DISPLAYSURF.fill(WHITE)
-
     drawGameMap()
-    # cloudsTest()
-    checkPlayerAnimation()
     drawPlayer()
     drawInventory()
     pygame.display.flip()
