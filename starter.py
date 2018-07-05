@@ -43,6 +43,7 @@ def displayTile(TILE, x, y):
         DISPLAYSURF.blit(TILE, (x, y))
     else:
         pygame.draw.rect(DISPLAYSURF, TILE, (x, y, 16, 16))
+
 #PLAYER ANIMATION TEXTURES
 ANIMATIONIMAGE = {
     0   : pygame.image.load("images/sprites/playSprite.png"),
@@ -52,6 +53,7 @@ ANIMATIONIMAGE = {
 #PLAYER VARIABLES
 PMOVECALL = True #Is the player requested to move?
 MovementDelay = 0
+cloudDelay = 0
 PlayerImage = pygame.image.load("images/sprites/playSprite.png")
 
 #PLAYER GENERATOR
@@ -69,6 +71,17 @@ def movePlayer(dir):
 
 TILEMAP = gametiles.TILEMAP
 BLOCKLIST = gametiles.BLOCKLIST
+
+def cloudsTest():
+    global cloudDelay
+    for Tile in gametiles.BLOCKCOUPLER[2]:
+        if cloudDelay <= 320:
+            cloudDelay += 1
+        else:
+            Tile.moveTile("right")
+            cloudDelay = 0
+    for Tile in gametiles.BLOCKCOUPLER[2]:
+        displayTile(Tile, Tile.xpos, Tile.ypos)
 
 def checkPlayerAnimation():
     global PlayerImage
@@ -101,8 +114,10 @@ def drawInventory(): #Testing Inventories, may have to refactor later
     for key in inventory.keys():
         if key in BLOCKTEXTURES:
             displayTile(BLOCKTEXTURES[key], 522, keyListing)    #For textured blocks
-        TEXT = TestText.render(str(inventory[key]), False, BLACK, None)
-        displayTile(TEXT, 542, keyListing-4)
+        COUNTTEXT = TestText.render(str(inventory[key]), False, BLACK, None)
+        BLOCKTEXT = TestText.render(BLOCKLIST[key][0], False, BLACK, None)
+        displayTile(COUNTTEXT, 542, keyListing-4)
+        displayTile(BLOCKTEXT, 562, keyListing-4)
         keyListing += 26
 
 while True: # main game loop
@@ -134,7 +149,9 @@ while True: # main game loop
     elif pressed[pygame.K_DOWN]:    movePlayer("down")
 
     DISPLAYSURF.fill(WHITE)
+
     drawGameMap()
+    # cloudsTest()
     checkPlayerAnimation()
     drawPlayer()
     drawInventory()

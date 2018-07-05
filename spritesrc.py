@@ -1,5 +1,7 @@
 import gametiles, inventory, random
 
+BLOCKLIST = gametiles.BLOCKLIST
+
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
 BLACK   =   (0,0,0)
