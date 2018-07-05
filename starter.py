@@ -23,6 +23,18 @@ BLUE    =   (0,0,255)
 #MAP VARIABLES
 MAPGENERATED = 0
 
+#TEXTURE MAP
+BLOCKTEXTURES = {
+    0   :   pygame.image.load("images/grass.png"),
+    1   :   pygame.image.load("images/water.png")
+}
+
+#PLAYER ANIMATION TEXTURES
+ANIMATIONIMAGE = {
+    0   : pygame.image.load("images/playSprite.png"),
+    1   : pygame.image.load("images/spriteWaterer.png")
+}
+
 #PLAYER VARIABLES
 PMOVECALL = True #Is the player requested to move?
 MovementDelay = 0
@@ -35,7 +47,7 @@ def drawPlayer():
 def movePlayer(dir):
     global MovementDelay
     if PMOVECALL:
-        if MovementDelay <= 3:
+        if MovementDelay <= 4:
             MovementDelay += 1
         else:
             player.move(dir)
@@ -51,10 +63,7 @@ def checkPlayerAnimation():
         # print(pos[0]//16,pos[1]//16)
 
         BLOCKID = gametiles.getActiveTile(pos[0],pos[1]).blockid
-        if BLOCKID == 1:
-            PlayerImage = pygame.image.load("images/spriteWaterer.png")
-        else:
-            PlayerImage = pygame.image.load("images/playSprite.png")
+        PlayerImage = ANIMATIONIMAGE[BLOCKID]
 
 #TILE GENERATOR
 def drawGameMap():
@@ -66,17 +75,12 @@ def drawGameMap():
     for row in TILEMAP:
         for TILE in row:
             try:
-                pygame.draw.rect(DISPLAYSURF, BLOCKLIST[TILE.blockid][1], (TILE.xpos, TILE.ypos, 16, 16))
+                DISPLAYSURF.blit(BLOCKTEXTURES[TILE.blockid],(TILE.xpos, TILE.ypos))
             except:
-                print("TILE @ {0},{1} has invalid blockid of {2}".format(TILE.xpos, TILE.ypos, TILE.blockid))
-
-# drawGameMap()
-
-"""
-BUGS:
-- Buggy Player movement
-
-"""
+                try:
+                    pygame.draw.rect(DISPLAYSURF, BLOCKLIST[TILE.blockid][1], (TILE.xpos, TILE.ypos, 16, 16))
+                except:
+                    print("TILE @ {0},{1} has invalid blockid of {2}".format(TILE.xpos, TILE.ypos, TILE.blockid))
 
 while True: # main game loop
     for event in pygame.event.get():
@@ -123,6 +127,9 @@ Cool Mining Animation for later? Rock layer that peels away
     # for Tile in gametiles.getSurrounding(TILE):
     #     print(Tile.xpos // 16, Tile.ypos // 16)
     #     Tile.setBlockID(100)
+
+BUGS:
+- Buggy Player movement [Slightly Fixed]
 
 """
 
