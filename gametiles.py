@@ -15,10 +15,12 @@ RED     =   (255,0,0)
 GREEN   =   (0,255,0)
 BLUE    =   (0,0,255)
 
+#BLOCK textures
+
 #BLOCK INFO
 BLOCKLIST = {
-    0   : ["GRASS", GREEN],
-    1   : ["WATER", BLUE],
+    0   : ["GRASS", "grass.png"],
+    1   : ["WATER", "water.png"],
     100   : ["VOID", BLACK],
 }
 
