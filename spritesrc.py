@@ -1,4 +1,4 @@
-import gametiles, inventory
+import gametiles, inventory, random
 
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
@@ -37,6 +37,15 @@ class Player():
         inv = self.inv
         tile = gametiles.getActiveTile(self.xpos,self.ypos)
         inv.addItem(tile.blockid, 1)
+
+    def placeTile(self):
+        tile = gametiles.getActiveTile(self.xpos, self.ypos)
+        if not self.inv.isEmpty():
+            d = random.choice(list(self.inv.grabList().keys()))
+            if self.inv.inInv(d):
+                self.inv.removeItem(d, 1)
+                tile.setBlockID(d)
+
 
 MainPlayer = Player()
 

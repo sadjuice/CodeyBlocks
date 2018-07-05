@@ -9,7 +9,7 @@ player = spritesrc.MainPlayer
 DISPLAYSURF = pygame.display.set_mode((712, 512))
 
 displaywidth, displayheight = pygame.display.get_surface().get_size()
-#RIGHT INVT MARGIN (10px) 522 y x 10
+
 
 pygame.display.set_caption('Codey Blocks')
 TestText = pygame.font.SysFont("Comic Sans MS",16)
@@ -25,31 +25,34 @@ BLUE    =   (0,0,255)
 MAPGENERATED = 0
 
 #TEXTURE MAP
-BLOCKTEXTURES = {
-    0   :   pygame.image.load("images/grass.png"),
-    1   :   pygame.image.load("images/water.png")
-}
+BLOCKLIST = gametiles.BLOCKLIST
+BLOCKTEXTURES = {}
+for block in gametiles.BLOCKLIST.keys():
+    if isinstance(BLOCKLIST[block][1],str):
+        BLOCKTEXTURES[block] = pygame.image.load("images/blocks/"+BLOCKLIST[block][1])
+    else:
+        BLOCKTEXTURES[block] = BLOCKLIST[block][1]
 
 def displayTile(TILE, x, y):
     if isinstance(TILE, gametiles.Tile):
         try:
             DISPLAYSURF.blit(BLOCKTEXTURES[TILE.blockid], (x, y))
         except:
-            pygame.draw.rect(DISPLAYSURF, BLOCKLIST[TILE.blockid][1], (x, y, 16, 16))
+            pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[TILE.blockid], (x, y, 16, 16))
     elif isinstance(TILE, pygame.Surface):
         DISPLAYSURF.blit(TILE, (x, y))
     else:
         pygame.draw.rect(DISPLAYSURF, TILE, (x, y, 16, 16))
 #PLAYER ANIMATION TEXTURES
 ANIMATIONIMAGE = {
-    0   : pygame.image.load("images/playSprite.png"),
-    1   : pygame.image.load("images/spriteWaterer.png")
+    0   : pygame.image.load("images/sprites/playSprite.png"),
+    1   : pygame.image.load("images/sprites/spriteWaterer.png")
 }
 
 #PLAYER VARIABLES
 PMOVECALL = True #Is the player requested to move?
 MovementDelay = 0
-PlayerImage = pygame.image.load("images/playSprite.png")
+PlayerImage = pygame.image.load("images/sprites/playSprite.png")
 
 #PLAYER GENERATOR
 def drawPlayer():
@@ -92,17 +95,15 @@ def drawGameMap():
         for TILE in row:    displayTile(TILE, TILE.xpos, TILE.ypos)
 
 def drawInventory(): #Testing Inventories, may have to refactor later
+    # RIGHT INVT MARGIN (10px) 522 y x 10
     inventory = player.inv.grabList()
     keyListing = 0
     for key in inventory.keys():
         if key in BLOCKTEXTURES:
             displayTile(BLOCKTEXTURES[key], 522, keyListing)    #For textured blocks
-        else:
-            displayTile(BLOCKLIST[key][1],522, keyListing)  #For non-textured blocks
         TEXT = TestText.render(str(inventory[key]), False, BLACK, None)
-        displayTile(TEXT, 542, keyListing)
-        # DISPLAYSURF.blit(TEXT, (542,keyListing))
-        keyListing += 16
+        displayTile(TEXT, 542, keyListing-4)
+        keyListing += 26
 
 while True: # main game loop
     for event in pygame.event.get():
@@ -122,19 +123,15 @@ while True: # main game loop
                     Tile.setBlockID(100)
             if event.key == pygame.K_SPACE:
                 player.grabTile()
+            if event.key == pygame.K_p:
+                player.placeTile()
 
     pressed = pygame.key.get_pressed()
     # player movements
-    if pressed[pygame.K_UP]:
-        movePlayer("up")
-    elif pressed[pygame.K_RIGHT]:
-        movePlayer("right")
-    elif pressed[pygame.K_LEFT]:
-        movePlayer("left")
-    elif pressed[pygame.K_DOWN]:
-        movePlayer("down")
-    # elif pressed[pygame.K_SPACE]:
-    #     player.grabTile()
+    if pressed[pygame.K_UP]:        movePlayer("up")
+    elif pressed[pygame.K_RIGHT]:   movePlayer("right")
+    elif pressed[pygame.K_LEFT]:    movePlayer("left")
+    elif pressed[pygame.K_DOWN]:    movePlayer("down")
 
     DISPLAYSURF.fill(WHITE)
     drawGameMap()

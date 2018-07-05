@@ -35,7 +35,7 @@ class Tile():
         self.blockid = 0
         self.status = 0  # VOID var, might use later
         self.covered = 0  # Is something covering the block? 0 - False 1 - True
-        self.playerActive = 0  #
+        self.playerActive = 0  #Is player standing on block?
         self.xpos = 0
         self.ypos = 0
 
