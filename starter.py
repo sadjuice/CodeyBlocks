@@ -23,6 +23,7 @@ TILESIZE = spritesrc.TILESIZE
 TILEMAP = gametiles.TILEMAP
 BLOCKLIST = gametiles.BLOCKLIST
 BLOCKTEXTURES = {}
+BLOCKCOUPLER = gametiles.BLOCKCOUPLER
 
 #TEXTURE MAP
 for block in gametiles.BLOCKLIST.keys():
@@ -83,6 +84,22 @@ def drawGameMap():
         gametiles.initGenTile()
         MAPGENERATED = 1
     [[displayTile(TILE, TILE.xpos, TILE.ypos) for TILE in row] for row in TILEMAP]  #Draw tiles
+    #Draw buffers tester
+    for Tile in BLOCKCOUPLER[1]:
+        # pygame.draw.rect(DISPLAYSURF, RED, (Tile.xpos, Tile.ypos, 8, 8))
+        for x in gametiles.getRowNeighbor(Tile):
+            if x.blockid == 0:
+                #If
+                if x.xpos > Tile.xpos:
+                    pygame.draw.rect(DISPLAYSURF, RED, (Tile.xpos+16, Tile.ypos+4, 8, 8))
+                if x.xpos < Tile.xpos:
+                    pygame.draw.rect(DISPLAYSURF, RED, (Tile.xpos-8, Tile.ypos+4, 8, 8))
+
+                if x.ypos > Tile.ypos:
+                    pygame.draw.rect(DISPLAYSURF, WHITE, (Tile.xpos+4, Tile.ypos, 8, 8))
+                if x.ypos < Tile.ypos:
+                    pygame.draw.rect(DISPLAYSURF, WHITE, (Tile.xpos+4, Tile.ypos, 8, 8))
+
 
 def drawInventory(): #Testing Inventories, may have to refactor later
     # RIGHT INVT MARGIN (10px) 522 y x 10
@@ -157,3 +174,4 @@ BUGS:
 
 """
 
+print("hello")

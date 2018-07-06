@@ -81,12 +81,12 @@ def initGenTile():
         Tile = TILEMAP[random.randint(0,TILEHEIGHT-1)][random.randint(0,TILEWIDTH-1)]
         waterGen(Tile, 100, 1)
     #Sandgen
-    if 1 in BLOCKCOUPLER.keys():
-        for Tile in set(BLOCKCOUPLER[1]):
-            sandlist = getSurrounding(Tile)
-            for Tile in sandlist:
-                if Tile.blockid == 0:
-                    Tile.setBlockID(2)
+    # if 1 in BLOCKCOUPLER.keys():
+    #     for Tile in set(BLOCKCOUPLER[1]):
+    #         sandlist = getSurrounding(Tile)
+    #         for Tile in sandlist:
+    #             if Tile.blockid == 0:
+    #                 Tile.setBlockID(2)
 
 def dimConvert(val):    return val//16 #Converts dimensions to // 16
 
@@ -124,12 +124,14 @@ def waterGen(T, percent, id):
     if T == None:
         T = Tile()
     T.setBlockID(id)
+    if id in BLOCKCOUPLER.keys():
+        BLOCKCOUPLER[id].append(T)
+    else:
+        BLOCKCOUPLER[id] = [T]
     for newT in getSurrounding(T):
         chanceGen = random.randint(0, 100)
         if chanceGen in [x for x in range(0,percent)]:
             waterGen(newT,percent-WATERPERCENTDECLINE, id)
-            if id in BLOCKCOUPLER.keys():   BLOCKCOUPLER[id].append(T)
-            else:   BLOCKCOUPLER[id] = [T]
     return True
 
 
