@@ -12,9 +12,13 @@ TILESIZE = gametiles.TILESIZE
 
 class Player():
     def __init__(self):
-        self.xpos = 0
-        self.ypos = 0
+        self.xpos, self.ypos = 0, 0
         self.inv = inventory.Inventory()
+        self.orientation = 0
+        #0 - Left
+        #1 - UP
+        #2 - Right
+        #3 - DOWN
 
     def checkPos(self, x, y):
         if x//TILESIZE >= gametiles.TILEWIDTH or y//TILESIZE >= gametiles.TILEHEIGHT:
@@ -25,31 +29,31 @@ class Player():
             return True
 
     def move(self, dir):
-        if dir == "up":
-            if self.checkPos(self.ypos - PLAYER_SPEED, self.ypos):    self.ypos -= PLAYER_SPEED
-        if dir == "right":
-            if self.checkPos(self.xpos+PLAYER_SPEED, self.ypos):    self.xpos += PLAYER_SPEED
-        if dir == "left":
-            if self.checkPos(self.xpos-PLAYER_SPEED, self.ypos):    self.xpos -= PLAYER_SPEED
-        if dir == "down":
-            if self.checkPos(self.ypos+PLAYER_SPEED, self.ypos):    self.ypos += PLAYER_SPEED
+        if dir == "up" and self.checkPos(self.ypos - PLAYER_SPEED, self.ypos):
+            self.ypos -= PLAYER_SPEED
+            self.orientation = 1
+        if dir == "right" and self.checkPos(self.xpos+PLAYER_SPEED, self.ypos):
+            self.xpos += PLAYER_SPEED
+            self.orientation = 2
+        if dir == "left" and self.checkPos(self.xpos-PLAYER_SPEED, self.ypos):
+            self.xpos -= PLAYER_SPEED
+            self.orientation = 0
+        if dir == "down" and self.checkPos(self.ypos+PLAYER_SPEED, self.ypos):
+            self.ypos += PLAYER_SPEED
+            self.orientation = 3
 
     def getPos(self):   return self.xpos, self.ypos
 
     def grabTile(self):
-        inv = self.inv
         tile = gametiles.getActiveTile(self.xpos,self.ypos)
-        inv.addItem(tile.blockid, 1)
+        self.inv.addItem(tile.blockid, 1)
 
     def placeTile(self):
+        inv = self.inv
         tile = gametiles.getActiveTile(self.xpos, self.ypos)
-        if not self.inv.isEmpty():
-            d = random.choice(list(self.inv.grabList().keys()))
-            if self.inv.inInv(d):
-                self.inv.removeItem(d, 1)
+        if not inv.isEmpty():
+            d = random.choice(list(inv.grabList().keys()))
+            if inv.inInv(d):
+                inv.removeItem(d, 1)
                 tile.setBlockID(d)
-
-
-MainPlayer = Player()
-
 

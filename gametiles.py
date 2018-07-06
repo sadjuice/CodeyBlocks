@@ -6,7 +6,7 @@ TILEHEIGHT = 32
 TILELIMIT = 512
 TILESIZE = 16
 TILEGEN = (TILEWIDTH * 10) + 16
-#To get a Tile's index of block use xpos // 16, ypos // 16
+#To get a Tile's index of block use dimConvert() x//16
 
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
@@ -18,10 +18,10 @@ PASTEY = (222,222,222)
 
 #BLOCK INFO
 BLOCKLIST = {
-    0       :   ["GRASS", "grass.png"],
-    1       :   ["WATER", "water.png"],
-    2       :   ["SAND",    "sand.png"],
-    100     :   ["VOID", BLACK]
+    0   :   ["GRASS", "grass.png"],
+    1   :   ["WATER", "water.png"],
+    2   :   ["SAND",    "sand.png"],
+    100 :   ["VOID", BLACK]
 }
 
 #GENERATION CONFIG
@@ -62,9 +62,9 @@ class Tile():
             self.ypos += CLOUDSPEED
 
 def baseGridGen():
-    return [[Tile() for x in range(0, TILEHEIGHT)] for x in range(0, TILEWIDTH)]
+    return [[Tile() for x in range(0, TILEHEIGHT)] for y in range(0, TILEWIDTH)]
 TILEMAP = baseGridGen()
-CLOUDMAP = [[None for x in range(0,TILEHEIGHT)] for x in range(0,TILEWIDTH)]
+CLOUDMAP = [[None for x in range(0,TILEHEIGHT)] for y in range(0,TILEWIDTH)]
 
 WATERLIST = []
 
@@ -88,21 +88,19 @@ def initGenTile():
                 if Tile.blockid == 0:
                     Tile.setBlockID(2)
 
+def dimConvert(val):    return val//16 #Converts dimensions to // 16
+
 def getActiveTile(x, y):
-    newx = x // TILESIZE
-    newy = y // TILESIZE
-    Tile = TILEMAP[newy][newx]
+    Tile = TILEMAP[dimConvert(y)][dimConvert(x)]
     return Tile
 
 def getSurrounding(tile):
-    l = getRowNeighbor(tile) + getColumnNeighbor(tile)
-    return l
+    return getRowNeighbor(tile) + getColumnNeighbor(tile)
 
 def getRowNeighbor(tile):
     #X-Axis
     #LEFT - LEFT, RIGHT - RIGHT
-    newx = tile.xpos // TILESIZE
-    newy = tile.ypos // TILESIZE
+    newx, newy = dimConvert(tile.xpos), dimConvert(tile.ypos)
     l = []
     for x in [-1,1]:
         var = newx+x
@@ -112,10 +110,8 @@ def getRowNeighbor(tile):
     return l
 
 def getColumnNeighbor(tile):
-    #Y-Axis
-    # LEFT - ROW ABOVE, RIGHT - ROW BELOW
-    newx = tile.xpos // TILESIZE
-    newy = tile.ypos // TILESIZE
+    #Y-Axis || LEFT - ROW ABOVE, RIGHT - ROW BELOW
+    newx, newy = dimConvert(tile.xpos), dimConvert(tile.ypos)
     l = []
     for y in [-1,1]:
         var = newy+y
@@ -132,10 +128,8 @@ def waterGen(T, percent, id):
         chanceGen = random.randint(0, 100)
         if chanceGen in [x for x in range(0,percent)]:
             waterGen(newT,percent-WATERPERCENTDECLINE, id)
-            if id in BLOCKCOUPLER.keys():
-                BLOCKCOUPLER[id].append(T)
-            else:
-                BLOCKCOUPLER[id] = [T]
+            if id in BLOCKCOUPLER.keys():   BLOCKCOUPLER[id].append(T)
+            else:   BLOCKCOUPLER[id] = [T]
     return True
 
 

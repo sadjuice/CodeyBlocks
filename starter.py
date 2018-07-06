@@ -31,31 +31,35 @@ for block in gametiles.BLOCKLIST.keys():
 
 def displayTile(requestedDisplay, x, y):
     if isinstance(requestedDisplay, gametiles.Tile):    #If request is a tile
-        try:
-            DISPLAYSURF.blit(BLOCKTEXTURES[requestedDisplay.blockid], (x, y))   #for textured tiles
-        except:
-            pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[requestedDisplay.blockid], (x, y, TILESIZE, TILESIZE))  #for non-textured tiles
-    elif isinstance(requestedDisplay, pygame.Surface):
-        DISPLAYSURF.blit(requestedDisplay, (x, y))  #For images, and text
-    else:
-        pygame.draw.rect(DISPLAYSURF, requestedDisplay, (x, y, TILESIZE, TILESIZE)) #For plain int.
+        try:    DISPLAYSURF.blit(BLOCKTEXTURES[requestedDisplay.blockid], (x, y))   #for textured tiles
+        except: pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[requestedDisplay.blockid], (x, y, TILESIZE, TILESIZE))  #for non-textured tiles
+    elif isinstance(requestedDisplay, pygame.Surface):  DISPLAYSURF.blit(requestedDisplay, (x, y))  #For images, and text
+    else:   pygame.draw.rect(DISPLAYSURF, requestedDisplay, (x, y, TILESIZE, TILESIZE)) #For plain int.
 
 #PLAYER ANIMATION TEXTURES
 ANIMATIONIMAGE = {
-    0   : pygame.image.load("images/sprites/playSprite.png"),
-    1   : pygame.image.load("images/sprites/spriteWaterer.png")
+    0: pygame.image.load("images/sprites/playSprite.png"),
+    1: pygame.image.load("images/sprites/spriteWaterer.png")
 }
 
 #PLAYER VARIABLES
-player = spritesrc.MainPlayer
+player = spritesrc.Player()
 MovementDelay = 0
 cloudDelay = 0
 PlayerImage = pygame.image.load("images/sprites/playSprite.png")
 
 #PLAYER GENERATOR
 def drawPlayer():
+    IMG = PlayerImage
     checkPlayerAnimation()
-    DISPLAYSURF.blit(PlayerImage,(player.getPos()))
+    if player.orientation == 0:
+        IMG = pygame.transform.flip(PlayerImage,True,False)
+    elif player.orientation == 1:
+        IMG = pygame.transform.flip(PlayerImage,False,True)
+    elif player.orientation == 3:
+        IMG = pygame.image.load("images/sprites/spriteWaterer.png")
+    DISPLAYSURF.blit(IMG,(player.getPos()))
+    print(player.orientation)
 
 def movePlayer(dir):
     global MovementDelay
@@ -63,20 +67,6 @@ def movePlayer(dir):
     else:   
         player.move(dir)
         MovementDelay = 0
-
-"""
-#CLOUD TEST (Doesn't work)
-def cloudsTest():
-    global cloudDelay
-    for Tile in gametiles.BLOCKCOUPLER[2]:
-        if cloudDelay <= 320:
-            cloudDelay += 1
-        else:
-            Tile.moveTile("right")
-            cloudDelay = 0
-    for Tile in gametiles.BLOCKCOUPLER[2]:
-        displayTile(Tile, Tile.xpos, Tile.ypos)
-"""
 
 def checkPlayerAnimation():
     global PlayerImage
@@ -142,6 +132,18 @@ while True: # main game loop
 
 
 """
+#CLOUD TEST (Doesn't work)
+def cloudsTest():
+    global cloudDelay
+    for Tile in gametiles.BLOCKCOUPLER[2]:
+        if cloudDelay <= 320:
+            cloudDelay += 1
+        else:
+            Tile.moveTile("right")
+            cloudDelay = 0
+    for Tile in gametiles.BLOCKCOUPLER[2]:
+        displayTile(Tile, Tile.xpos, Tile.ypos)
+        
 Cool Mining Animation for later? Rock layer that peels away
     # pos = player.getPos()
     # TILE = gametiles.getActiveTile(pos[0], pos[1])
