@@ -1,6 +1,7 @@
 import gametiles, inventory, random
 
 BLOCKLIST = gametiles.BLOCKLIST
+PASSABLEBLOCKS = gametiles.PASSABLEBLOCKS
 
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
@@ -21,15 +22,17 @@ class Player():
         #3 - DOWN
 
     def checkPos(self, x, y):
-        if x//TILESIZE >= gametiles.TILEWIDTH or y//TILESIZE >= gametiles.TILEHEIGHT:
-            return False
-        elif x < 0 or y < 0:
+        if (x//TILESIZE >= gametiles.TILEWIDTH or y//TILESIZE >= gametiles.TILEHEIGHT) or (x < 0 or y < 0):
             return False
         else:
-            return True
+            TargetTile = gametiles.getActiveTile(x, y)
+        if not TargetTile.blockid in PASSABLEBLOCKS:
+            TargetTile.setBlockID(100)
+            return False
+        else:   return True
 
     def move(self, dir):
-        if dir == "up" and self.checkPos(self.ypos - PLAYER_SPEED, self.ypos):
+        if dir == "up" and self.checkPos(self.xpos, self.ypos - PLAYER_SPEED):
             self.ypos -= PLAYER_SPEED
             self.orientation = 1
         if dir == "right" and self.checkPos(self.xpos+PLAYER_SPEED, self.ypos):
@@ -38,7 +41,7 @@ class Player():
         if dir == "left" and self.checkPos(self.xpos-PLAYER_SPEED, self.ypos):
             self.xpos -= PLAYER_SPEED
             self.orientation = 0
-        if dir == "down" and self.checkPos(self.ypos+PLAYER_SPEED, self.ypos):
+        if dir == "down" and self.checkPos(self.xpos, self.ypos+PLAYER_SPEED):
             self.ypos += PLAYER_SPEED
             self.orientation = 3
 

@@ -5,7 +5,8 @@ pygame.init()
 
 #PYGAME variables
 clock = pygame.time.Clock()
-DISPLAYSURF = pygame.display.set_mode((712, 512)) # pygame.FULLSCREEN
+DISPLAYSURF = pygame.display.set_mode((712, 512))   # pygame.FULLSCREEN
+BUFFERSURF = pygame.display.set_mode((512,512))     # Buffer surface
 displaywidth, displayheight = pygame.display.get_surface().get_size()
 pygame.display.set_caption('Codey Blocks')
 TestText = pygame.font.SysFont("Comic Sans MS",16)
@@ -16,6 +17,7 @@ BLACK   =   (0,0,0)
 RED     =   (255,0,0)
 GREEN   =   (0,255,0)
 BLUE    =   (0,0,255)
+YELLOW  = 	(255,255,0)
 
 #MAP VARIABLES
 MAPGENERATED = 0
@@ -24,6 +26,8 @@ TILEMAP = gametiles.TILEMAP
 BLOCKLIST = gametiles.BLOCKLIST
 BLOCKTEXTURES = {}
 BLOCKCOUPLER = gametiles.BLOCKCOUPLER
+PASSABLEBLOCKS = gametiles.PASSABLEBLOCKS
+BUFFERLIST = gametiles.BUFFERLIST
 
 #TEXTURE MAP
 for block in gametiles.BLOCKLIST.keys():
@@ -60,7 +64,6 @@ def drawPlayer():
     elif player.orientation == 3:
         IMG = pygame.image.load("images/sprites/spriteWaterer.png")
     DISPLAYSURF.blit(IMG,(player.getPos()))
-    print(player.orientation)
 
 def movePlayer(dir):
     global MovementDelay
@@ -84,21 +87,29 @@ def drawGameMap():
         gametiles.initGenTile()
         MAPGENERATED = 1
     [[displayTile(TILE, TILE.xpos, TILE.ypos) for TILE in row] for row in TILEMAP]  #Draw tiles
-    #Draw buffers tester
-    for Tile in BLOCKCOUPLER[1]:
-        # pygame.draw.rect(DISPLAYSURF, RED, (Tile.xpos, Tile.ypos, 8, 8))
-        for x in gametiles.getRowNeighbor(Tile):
-            if x.blockid == 0:
-                #If
-                if x.xpos > Tile.xpos:
-                    pygame.draw.rect(DISPLAYSURF, RED, (Tile.xpos+16, Tile.ypos+4, 8, 8))
-                if x.xpos < Tile.xpos:
-                    pygame.draw.rect(DISPLAYSURF, RED, (Tile.xpos-8, Tile.ypos+4, 8, 8))
 
-                if x.ypos > Tile.ypos:
-                    pygame.draw.rect(DISPLAYSURF, WHITE, (Tile.xpos+4, Tile.ypos, 8, 8))
-                if x.ypos < Tile.ypos:
-                    pygame.draw.rect(DISPLAYSURF, WHITE, (Tile.xpos+4, Tile.ypos, 8, 8))
+    #Draw buffers tester
+    if len(BUFFERLIST) > 0:
+        for key in BUFFERLIST.keys():
+            if not BUFFERLIST[key] == None:
+                if isinstance(BUFFERLIST[key], list):
+                    for buffer in BUFFERLIST[key]:
+                        x, y = buffer.getPos()
+                        if buffer.getType() == 0:
+                            pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
+                        if buffer.getType() == 1:
+                            pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 16, 8))
+                        if buffer.getType() == 2:
+                            pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 8))
+                else:
+                    buffer = BUFFERLIST[key]
+                    x, y = buffer.getPos()
+                    if buffer.getType() == 0:
+                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
+                    if buffer.getType() == 1:
+                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 16, 8))
+                    if buffer.getType() == 2:
+                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 8))
 
 
 def drawInventory(): #Testing Inventories, may have to refactor later
@@ -173,5 +184,3 @@ BUGS:
 - Buggy Player movement [Slightly Fixed]
 
 """
-
-print("hello")
