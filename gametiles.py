@@ -1,9 +1,9 @@
-import random, buffer
+import random, buffer, operator
 
 #TILE PARAMETERS DO NOT EDIT!
 TILEWIDTH = 32
 TILEHEIGHT = 32
-TILELIMIT = 512
+TILELIMIT = TILEWIDTH * TILEHEIGHT
 TILESIZE = 16
 TILEGEN = (TILEWIDTH * 10) + 16
 #To get a Tile's index of block use dimConvert() x//16
@@ -25,11 +25,11 @@ BLOCKLIST = {
     100 :   ["VOID", BLACK]
 }
 
-PASSABLEBLOCKS = [0,1,2]  #BlockID's that can be walked on
+PASSABLEBLOCKS = [0,1,2,100]  #BlockID's that can be walked on
 
 #GENERATION CONFIG
 WATERPERCENTDECLINE = 10
-NUMBEROFWATERBLOCKS = 4 #Max number of lake spawn blocks that can spawn
+NUMBEROFWATERBLOCKS = 4 * (TILEWIDTH // 16)#Max number of lake spawn blocks that can spawn
 
 #Buffer list
 BUFFERLIST = {
@@ -81,25 +81,16 @@ WATERLIST = []
 
 #TILE INDEX
 def initGenTile():
-    for key in BLOCKCOUPLER.keys():
-        BLOCKCOUPLER[key] = []
-    for key in BUFFERLIST.keys():
-        BUFFERLIST[key] = None
+    global BLOCKCOUPLER, BUFFERLIST
+    BLOCKCOUPLER = {}
+    BUFFERLIST = {}
     for y in range(0, TILEHEIGHT):
         for x in range(0,TILEWIDTH):
-            # generint = random.randint(0, 100)
             Tile = TILEMAP[y][x]
             Tile.properties(0, x * TILESIZE, y * TILESIZE)
     for i in range(0,random.randint(1,NUMBEROFWATERBLOCKS)):
         Tile = TILEMAP[random.randint(0,TILEHEIGHT-1)][random.randint(0,TILEWIDTH-1)]
         waterGen(Tile, 100, 1)
-    #Sandgen
-    # if 1 in BLOCKCOUPLER.keys():
-    #     for Tile in set(BLOCKCOUPLER[1]):
-    #         sandlist = getSurrounding(Tile)
-    #         for Tile in sandlist:
-    #             if Tile.blockid == 0:
-    #                 Tile.setBlockID(2)
     """
         Notes on Buffers:
         
@@ -109,72 +100,77 @@ def initGenTile():
         
     
     """
+    # print(len(BLOCKCOUPLER))
+    BUFFERGAP = 12
     for Tile in BLOCKCOUPLER[1]:
-        # for x in getDiagonals(Tile):
-        #     newBuffer = buffer.Buffer()
-        #     newBuffer.setType(2)
-        #     newBuffer.setColour(YELLOW)
-        #     if x.blockid == 0:
-        #         if x.xpos < Tile.xpos and x.ypos < Tile.ypos:   #Top left
-        #             newBuffer.setPos(x.xpos+8, x.ypos+8)
-        #         if x.xpos < Tile.xpos and x.ypos > Tile.ypos:   #Top right
-        #             newBuffer.setPos(x.xpos+8,x.ypos)
-        #         if x.xpos > Tile.xpos and x.ypos > Tile.ypos:   #Bottom Left
-        #             newBuffer.setPos(x.xpos,x.ypos)
-        #         if x.xpos > Tile.xpos and x.ypos < Tile.ypos:   #Bottom Right
-        #             newBuffer.setPos(x.xpos,x.ypos+8)
-        #     BUFFERLIST[x.xpos,x.ypos] = newBuffer
-        for x in getRowNeighbor(Tile):
+        for conBlock in getDiagonals(Tile):
+            newBuffer = buffer.Buffer()
+            newBuffer.setColour(YELLOW)
+            if conBlock.blockid == 0:
+                for x in [operator.gt,operator.lt]:
+                    for y in [operator.gt,operator.lt]:
+                        xadd, yadd = 0, 0
+                        if x == operator.lt:    xadd = BUFFERGAP
+                        if y == operator.lt:    yadd = BUFFERGAP
+                        if x(conBlock.xpos,Tile.xpos) and y(conBlock.ypos,Tile.ypos):
+                            if xadd == 0:
+                                if yadd == BUFFERGAP:
+                                    newBuffer.setType(6)
+                                    yadd += 1
+                                    xadd -= 1
+                                elif yadd == 0:
+                                    newBuffer.setType(0)
+                            if xadd == BUFFERGAP:
+                                if yadd == BUFFERGAP:
+                                    newBuffer.setType(4)
+                                    xadd += 1
+                                    yadd += 1
+                                if yadd == 0:
+                                    newBuffer.setType(2)
+                            newBuffer.setAdd(xadd, yadd)
+                            newBuffer.setPos(conBlock.xpos + xadd, conBlock.ypos + yadd)
+
+            if (conBlock.xpos,conBlock.ypos) in BUFFERLIST.keys():  BUFFERLIST[conBlock.xpos, conBlock.ypos].append(newBuffer)
+            else:   BUFFERLIST[conBlock.xpos,conBlock.ypos] = [newBuffer]
+        for conBlock in getRowNeighbor(Tile):
             newBuffer = buffer.Buffer()
             newBuffer.setType(1)
             newBuffer.setColour(YELLOW)
-            if x.blockid == 0:
-                if x.xpos > Tile.xpos:  #Right
-                    newBuffer.setPos(x.xpos, x.ypos)
-                    # pygame.draw.rect(DISPLAYSURF, RED, (x.xpos, x.ypos, 8, 16))
-                if x.xpos < Tile.xpos:  #Left
-                    newBuffer.setPos(x.xpos+8, x.ypos)
-                    # pygame.draw.rect(DISPLAYSURF, RED, (x.xpos+8, x.ypos, 8, 16))
-            # if (x.xpos, x.ypos) in BUFFERLIST:
-            #     if BUFFERLIST[x.xpos, x.ypos] != None:
-            #         BUFFERLIST[x.xpos, x.ypos] = newBuffer
-            # else:
-            if (x.xpos, x.ypos) in BUFFERLIST:
-                if isinstance(BUFFERLIST[x.xpos, x.ypos], list):
-                    BUFFERLIST[x.xpos, x.ypos].append(newBuffer)
-                else:
-                    BUFFERLIST[x.xpos, x.ypos] = [BUFFERLIST[x.xpos, x.ypos], newBuffer]
-            else:
-                BUFFERLIST[x.xpos, x.ypos] = newBuffer
-        for x in getColumnNeighbor(Tile):
-                newBuffer = buffer.Buffer()
-                newBuffer.setType(0)
-                newBuffer.setColour(YELLOW)
-                if x.blockid == 0:
-                    if x.ypos > Tile.ypos:  #Bottom
-                        newBuffer.setPos(x.xpos, x.ypos)
-                        # pygame.draw.rect(DISPLAYSURF, WHITE, (x.xpos, x.ypos, 16, 8))
-                    if x.ypos < Tile.ypos:  #Top
-                        newBuffer.setPos(x.xpos, x.ypos+8)
-                        # pygame.draw.rect(DISPLAYSURF, WHITE, (x.xpos, x.ypos+8, 16, 8))
-                if (x.xpos, x.ypos) in BUFFERLIST:
-                    if BUFFERLIST[x.xpos, x.ypos] != None:
-                        if isinstance(BUFFERLIST[x.xpos, x.ypos], list):
-                            if not 2 in [buffer.getType() for buffer in BUFFERLIST[x.xpos, x.ypos] if isinstance(x, classmethod)]:
-                                BUFFERLIST[x.xpos, x.ypos].append(newBuffer)
-                        elif BUFFERLIST[x.xpos, x.ypos].getType() == 1:
-                            BUFFERLIST[x.xpos, x.ypos] = [BUFFERLIST[x.xpos, x.ypos], newBuffer]
-                else:
-                    BUFFERLIST[x.xpos, x.ypos] = newBuffer
+            if conBlock.blockid == 0:
+                for x in [operator.gt,operator.lt]:
+                    xadd = 0
+                    if x == operator.lt:    xadd = BUFFERGAP
+                    if x(conBlock.xpos,Tile.xpos):
+                        newBuffer.setPos(conBlock.xpos+xadd,conBlock.ypos)
+                        newBuffer.setAdd(xadd, 0)
+                        if xadd == 0: newBuffer.setType(7)
+                        elif xadd == BUFFERGAP:   newBuffer.setType(3)
+                if (conBlock.xpos,conBlock.ypos) in BUFFERLIST.keys():BUFFERLIST[conBlock.xpos, conBlock.ypos].append(newBuffer)
+                else:   BUFFERLIST[conBlock.xpos,conBlock.ypos] = [newBuffer]
+        for conBlock in getColumnNeighbor(Tile):
+            newBuffer = buffer.Buffer()
+            newBuffer.setType(0)
+            newBuffer.setColour(YELLOW)
+            if conBlock.blockid == 0:
+                for x in [operator.gt, operator.lt]:
+                    xadd, yadd = 0, 0
+                    if x == operator.lt:    yadd = BUFFERGAP
+                    if x(conBlock.ypos, Tile.ypos):
+                        newBuffer.setPos(conBlock.xpos, conBlock.ypos+yadd)
+                        newBuffer.setAdd(xadd, yadd)
+                        if yadd == BUFFERGAP:   newBuffer.setType(5)
+                        elif yadd == 0:           newBuffer.setType(1)
+                if (conBlock.xpos, conBlock.ypos) in BUFFERLIST.keys(): BUFFERLIST[conBlock.xpos, conBlock.ypos].append(newBuffer)
+                else:   BUFFERLIST[conBlock.xpos, conBlock.ypos] = [newBuffer]
 
-def dimConvert(val):    return val//16 #Converts dimensions to // 16
+def dimConvert(val):    return val//TILESIZE #Converts dimensions to // tile dimension
 
 def getActiveTile(x, y):
     Tile = TILEMAP[dimConvert(y)][dimConvert(x)]
     return Tile
 
 def getSurrounding(tile):
-    return getRowNeighbor(tile) + getColumnNeighbor(tile)
+    return getRowNeighbor(tile) + getColumnNeighbor(tile) + getDiagonals(tile)
 
 def getRowNeighbor(tile):
     #X-Axis
@@ -212,6 +208,7 @@ def getColumnNeighbor(tile):
     return l
 
 def waterGen(T, percent, id):
+    global BLOCKCOUPLER
     if T == None:
         T = Tile()
     T.setBlockID(id)
@@ -219,11 +216,14 @@ def waterGen(T, percent, id):
         BLOCKCOUPLER[id].append(T)
     else:
         BLOCKCOUPLER[id] = [T]
-    for newT in getSurrounding(T):
+    for newT in (getRowNeighbor(T) + getColumnNeighbor(T)):
         chanceGen = random.randint(0, 100)
         if chanceGen in [x for x in range(0,percent)]:
             waterGen(newT,percent-WATERPERCENTDECLINE, id)
     return True
+
+# def getBuffers(Tile):
+
 
 
 

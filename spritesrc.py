@@ -2,13 +2,14 @@ import gametiles, inventory, random
 
 BLOCKLIST = gametiles.BLOCKLIST
 PASSABLEBLOCKS = gametiles.PASSABLEBLOCKS
+BLOCKCOUPLER = gametiles.BLOCKCOUPLER
 
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
 BLACK   =   (0,0,0)
 RED     =   (255,0,0)
 
-PLAYER_SPEED = 16
+PLAYER_SPEED = gametiles.TILESIZE
 TILESIZE = gametiles.TILESIZE
 
 class Player():
@@ -52,6 +53,7 @@ class Player():
         self.inv.addItem(tile.blockid, 1)
 
     def placeTile(self):
+        global BLOCKCOUPLER
         inv = self.inv
         tile = gametiles.getActiveTile(self.xpos, self.ypos)
         if not inv.isEmpty():
@@ -59,4 +61,8 @@ class Player():
             if inv.inInv(d):
                 inv.removeItem(d, 1)
                 tile.setBlockID(d)
+                if d in BLOCKCOUPLER.keys():
+                    BLOCKCOUPLER[d].append(tile)
+                else:
+                    BLOCKCOUPLER[d] = [tile]
 

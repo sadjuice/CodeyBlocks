@@ -1,3 +1,5 @@
+BUFFERIMAGES = ["images/buffers/buff_"+str(x)+".png" for x in range(0,8)]
+
 class Buffer():
     """
     Buffer's are small texture overlays for texturing purposes.
@@ -5,15 +7,19 @@ class Buffer():
     """
     def __init__(self):
         self.x, self.y = 0, 0
-        self.type = 0
+        self.type = -1
         self.orientation = 0
         self.color = (255,255,255)
+        self.xadd, self.yadd = 0, 0
         """
             Type list
             0 - Vertical
             1 - Horizontal
             2 - Diagonal
         """
+    def setAdd(self, x, y):
+        self.xadd, self.yadd = x, y
+
     def getPos(self):
         return self.x,  self.y
 

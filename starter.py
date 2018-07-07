@@ -4,12 +4,13 @@ from pygame.locals import *
 pygame.init()
 
 #PYGAME variables
+TILESIZE = spritesrc.TILESIZE
 clock = pygame.time.Clock()
-DISPLAYSURF = pygame.display.set_mode((712, 512))   # pygame.FULLSCREEN
-BUFFERSURF = pygame.display.set_mode((512,512))     # Buffer surface
+DISPLAYSURF = pygame.display.set_mode(((TILESIZE * gametiles.TILEWIDTH)+200, TILESIZE * gametiles.TILEHEIGHT))   # pygame.FULLSCREEN
+BUFFERSURF = pygame.display.set_mode((TILESIZE * gametiles.TILEWIDTH+200,   TILESIZE * gametiles.TILEHEIGHT))     # Buffer surface
 displaywidth, displayheight = pygame.display.get_surface().get_size()
 pygame.display.set_caption('Codey Blocks')
-TestText = pygame.font.SysFont("Comic Sans MS",16)
+TestText = pygame.font.SysFont("Comic Sans MS",256)
 
 #COLOUR PALETTE
 WHITE   =   (255,255,255)
@@ -21,26 +22,41 @@ YELLOW  = 	(255,255,0)
 
 #MAP VARIABLES
 MAPGENERATED = 0
-TILESIZE = spritesrc.TILESIZE
 TILEMAP = gametiles.TILEMAP
 BLOCKLIST = gametiles.BLOCKLIST
 BLOCKTEXTURES = {}
 BUFFERTEXTURES = {}
-BLOCKCOUPLER = gametiles.BLOCKCOUPLER
 PASSABLEBLOCKS = gametiles.PASSABLEBLOCKS
-BUFFERLIST = gametiles.BUFFERLIST
 
 #TEXTURE MAP
 for block in gametiles.BLOCKLIST.keys():
     if isinstance(BLOCKLIST[block][1],str): BLOCKTEXTURES[block] = pygame.image.load("images/blocks/"+BLOCKLIST[block][1])
     else:   BLOCKTEXTURES[block] = BLOCKLIST[block][1]
 
+testList = []
 def displayTile(requestedDisplay, x, y, SURFACE=DISPLAYSURF):
-    if isinstance(requestedDisplay, gametiles.Tile):    #If request is a tile
-        try:    DISPLAYSURF.blit(BLOCKTEXTURES[requestedDisplay.blockid], (x, y))   #for textured tiles
-        except: pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[requestedDisplay.blockid], (x, y, TILESIZE, TILESIZE))  #for non-textured tiles
-    elif isinstance(requestedDisplay, pygame.Surface):  DISPLAYSURF.blit(requestedDisplay, (x, y))  #For images, and text
-    else:   pygame.draw.rect(DISPLAYSURF, requestedDisplay, (x, y, TILESIZE, TILESIZE)) #For plain int.
+    scale = (TILESIZE,TILESIZE)
+    # if isinstance(requestedDisplay, gametiles.Tile):    #If request is a tile
+    #     try:    DISPLAYSURF.blit(BLOCKTEXTURES[requestedDisplay.blockid], (x, y))   #for textured tiles
+    #     except: pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[requestedDisplay.blockid], (x, y, TILESIZE, TILESIZE))  #for non-textured tiles
+    # elif isinstance(requestedDisplay, gametiles.buffer.Buffer):
+    #     DISPLAYSURF.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[requestedDisplay.type]), (x, y))
+    # elif isinstance(requestedDisplay, pygame.Surface):  DISPLAYSURF.blit(requestedDisplay, (x, y))  #For images, and text
+    # else:   pygame.draw.rect(DISPLAYSURF, requestedDisplay, (x, y, TILESIZE, TILESIZE)) #For plain int.
+    displayType = type(requestedDisplay)
+    if displayType in [gametiles.Tile, gametiles.buffer.Buffer, pygame.Surface, tuple]:
+        if displayType == gametiles.Tile:
+            try:
+                DISPLAYSURF.blit(pygame.transform.scale(BLOCKTEXTURES[requestedDisplay.blockid],scale), (x, y))  # for textured tiles
+            except:
+                newSurf = pygame.Surface((TILESIZE, TILESIZE))
+                newSurf.fill(BLOCKTEXTURES[requestedDisplay.blockid])
+                DISPLAYSURF.blit(pygame.transform.scale(newSurf,scale), (x,y))
+        elif displayType == pygame.Surface:
+            DISPLAYSURF.blit(pygame.transform.scale(requestedDisplay,scale), (x,y))
+        elif displayTile == gametiles.buffer.Buffer:
+            BUFFERSURF.blit(pygame.transform.scale(requestedDisplay, scale), (x,y))
+
 
 #PLAYER ANIMATION TEXTURES
 ANIMATIONIMAGE = {
@@ -64,7 +80,7 @@ def drawPlayer():
         IMG = pygame.transform.flip(PlayerImage,False,True)
     elif player.orientation == 3:
         IMG = pygame.image.load("images/sprites/spriteWaterer.png")
-    DISPLAYSURF.blit(IMG,(player.getPos()))
+    DISPLAYSURF.blit(pygame.transform.scale(IMG,(TILESIZE,TILESIZE)),(player.getPos()))
 
 def movePlayer(dir):
     global MovementDelay
@@ -83,41 +99,40 @@ def checkPlayerAnimation():
 
 #TILE GENERATOR
 def drawGameMap():
-    global MAPGENERATED
+    global MAPGENERATED, BLOCKCOUPLER
     if MAPGENERATED == 0:   #Checks if map has been generated
         gametiles.initGenTile()
         MAPGENERATED = 1
     [[displayTile(TILE, TILE.xpos, TILE.ypos) for TILE in row] for row in TILEMAP]  #Draw tiles
-
+    BLOCKCOUPLER = gametiles.BLOCKCOUPLER
+    BUFFERLIST = gametiles.BUFFERLIST
     #Draw buffers tester
+    for key in BUFFERLIST.keys():
+        if isinstance(BUFFERLIST[key], list):
+            diag = [x for x in BUFFERLIST[key] if x.getType() in [4, 6]]
+            diagimage = pygame.image.load("images/buffers/blank.png")
+            for buf in diag:
+                diagimage.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
 
-    if len(BUFFERLIST) > 0:
-        for key in BUFFERLIST.keys():
-            if not BUFFERLIST[key] == None:
-                if isinstance(BUFFERLIST[key], list):
-                    DELLIST = []
-                    for buffer in BUFFERLIST[key]:
-                        if buffer != None:
-                            x, y = buffer.getPos()
-                            if buffer.getType() == 0:
-                                pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 16, 8))
-                            if buffer.getType() == 1:
-                                pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
-                            if buffer.getType() == 2:
-                                pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 8))
-                        else:
-                            DELLIST.append(buffer)
-                    for buffer in DELLIST:
-                        BUFFERLIST[key].remove(buffer)
-                else:
-                    buffer = BUFFERLIST[key]
-                    x, y = buffer.getPos()
-                    if buffer.getType() == 0:
-                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 16, 8))
-                    if buffer.getType() == 1:
-                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
-                    if buffer.getType() == 2:
-                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 8))
+            vertimage = pygame.image.load("images/buffers/blank.png")
+            vert = [x for x in BUFFERLIST[key] if x.getType() in [1,5]]
+            for buf in vert:
+                vertimage.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
+
+            horimage = pygame.image.load("images/buffers/blank.png")
+            hor = [x for x in BUFFERLIST[key] if x.getType() in [3, 7]]
+            for buf in hor:
+                horimage.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
+
+            BUFFERLIST[key] = [vertimage, horimage, diagimage]
+
+            wholeimage = pygame.image.load("images/buffers/blank.png")
+            for surface in BUFFERLIST[key]:
+                wholeimage.blit(surface,(0,0))
+            BUFFERLIST[key] = wholeimage
+        else:
+            displayTile(BUFFERLIST[key], key[0], key[1])
+    DISPLAYSURF.blit(BUFFERSURF,(0,0))
 
 
 def drawInventory(): #Testing Inventories, may have to refactor later
@@ -126,12 +141,12 @@ def drawInventory(): #Testing Inventories, may have to refactor later
     keyListing = 0
     for key in inventory.keys():
         if key in BLOCKTEXTURES:
-            displayTile(BLOCKTEXTURES[key], 522, keyListing)    #For textured blocks
+            displayTile(BLOCKTEXTURES[key], (TILESIZE * gametiles.TILEWIDTH+TILESIZE), keyListing)    #For textured blocks
         COUNTTEXT = TestText.render(str(inventory[key]), False, BLACK, None)
         BLOCKTEXT = TestText.render(BLOCKLIST[key][0], False, BLACK, None)
-        displayTile(COUNTTEXT, 542, keyListing-4)
-        displayTile(BLOCKTEXT, 562, keyListing-4)
-        keyListing += 26
+        displayTile(COUNTTEXT, (TILESIZE * gametiles.TILEWIDTH)+TILESIZE * 2, keyListing-(TILESIZE//4))
+        displayTile(BLOCKTEXT, (TILESIZE * gametiles.TILEWIDTH)+TILESIZE * 3, keyListing-(TILESIZE//4))
+        keyListing += TILESIZE
 
 while True: # main game loop
     for event in pygame.event.get():
