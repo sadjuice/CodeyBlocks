@@ -25,6 +25,7 @@ TILESIZE = spritesrc.TILESIZE
 TILEMAP = gametiles.TILEMAP
 BLOCKLIST = gametiles.BLOCKLIST
 BLOCKTEXTURES = {}
+BUFFERTEXTURES = {}
 BLOCKCOUPLER = gametiles.BLOCKCOUPLER
 PASSABLEBLOCKS = gametiles.PASSABLEBLOCKS
 BUFFERLIST = gametiles.BUFFERLIST
@@ -34,7 +35,7 @@ for block in gametiles.BLOCKLIST.keys():
     if isinstance(BLOCKLIST[block][1],str): BLOCKTEXTURES[block] = pygame.image.load("images/blocks/"+BLOCKLIST[block][1])
     else:   BLOCKTEXTURES[block] = BLOCKLIST[block][1]
 
-def displayTile(requestedDisplay, x, y):
+def displayTile(requestedDisplay, x, y, SURFACE=DISPLAYSURF):
     if isinstance(requestedDisplay, gametiles.Tile):    #If request is a tile
         try:    DISPLAYSURF.blit(BLOCKTEXTURES[requestedDisplay.blockid], (x, y))   #for textured tiles
         except: pygame.draw.rect(DISPLAYSURF, BLOCKTEXTURES[requestedDisplay.blockid], (x, y, TILESIZE, TILESIZE))  #for non-textured tiles
@@ -89,25 +90,32 @@ def drawGameMap():
     [[displayTile(TILE, TILE.xpos, TILE.ypos) for TILE in row] for row in TILEMAP]  #Draw tiles
 
     #Draw buffers tester
+
     if len(BUFFERLIST) > 0:
         for key in BUFFERLIST.keys():
             if not BUFFERLIST[key] == None:
                 if isinstance(BUFFERLIST[key], list):
+                    DELLIST = []
                     for buffer in BUFFERLIST[key]:
-                        x, y = buffer.getPos()
-                        if buffer.getType() == 0:
-                            pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
-                        if buffer.getType() == 1:
-                            pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 16, 8))
-                        if buffer.getType() == 2:
-                            pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 8))
+                        if buffer != None:
+                            x, y = buffer.getPos()
+                            if buffer.getType() == 0:
+                                pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 16, 8))
+                            if buffer.getType() == 1:
+                                pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
+                            if buffer.getType() == 2:
+                                pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 8))
+                        else:
+                            DELLIST.append(buffer)
+                    for buffer in DELLIST:
+                        BUFFERLIST[key].remove(buffer)
                 else:
                     buffer = BUFFERLIST[key]
                     x, y = buffer.getPos()
                     if buffer.getType() == 0:
-                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
-                    if buffer.getType() == 1:
                         pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 16, 8))
+                    if buffer.getType() == 1:
+                        pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 16))
                     if buffer.getType() == 2:
                         pygame.draw.rect(BUFFERSURF, buffer.color, (x, y, 8, 8))
 

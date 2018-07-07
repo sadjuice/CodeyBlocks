@@ -80,7 +80,6 @@ CLOUDMAP = [[None for x in range(0,TILEHEIGHT)] for y in range(0,TILEWIDTH)]
 WATERLIST = []
 
 #TILE INDEX
-#(BLOCKID, LOCATION)
 def initGenTile():
     for key in BLOCKCOUPLER.keys():
         BLOCKCOUPLER[key] = []
@@ -101,58 +100,72 @@ def initGenTile():
     #         for Tile in sandlist:
     #             if Tile.blockid == 0:
     #                 Tile.setBlockID(2)
+    """
+        Notes on Buffers:
+        
+        Update to Lists with the different sectors of the block that can be filled in.
+        e.g
+        List = [[sector1][sector2][sector3]]
+        
+    
+    """
     for Tile in BLOCKCOUPLER[1]:
-        for x in getDiagonals(Tile):
-            newBuffer = buffer.Buffer()
-            newBuffer.setColour(YELLOW)
-            if x.blockid == 0:
-                if x.xpos < Tile.xpos and x.ypos < Tile.ypos:   #Top left
-                    newBuffer.setPos(x.xpos+8, x.ypos+8)
-                    newBuffer.setType(2)
-                if x.xpos < Tile.xpos and x.ypos > Tile.ypos:   #Top right
-                    newBuffer.setPos(x.xpos+8,x.ypos)
-                    newBuffer.setType(2)
-                if x.xpos > Tile.xpos and x.ypos > Tile.ypos:   #Bottom Left
-                    newBuffer.setPos(x.xpos,x.ypos)
-                    newBuffer.setType(2)
-                if x.xpos > Tile.xpos and x.ypos < Tile.ypos:   #Bottom Right
-                    newBuffer.setPos(x.xpos,x.ypos+8)
-                    newBuffer.setType(2)
-            BUFFERLIST[x.xpos,x.ypos] = newBuffer
+        # for x in getDiagonals(Tile):
+        #     newBuffer = buffer.Buffer()
+        #     newBuffer.setType(2)
+        #     newBuffer.setColour(YELLOW)
+        #     if x.blockid == 0:
+        #         if x.xpos < Tile.xpos and x.ypos < Tile.ypos:   #Top left
+        #             newBuffer.setPos(x.xpos+8, x.ypos+8)
+        #         if x.xpos < Tile.xpos and x.ypos > Tile.ypos:   #Top right
+        #             newBuffer.setPos(x.xpos+8,x.ypos)
+        #         if x.xpos > Tile.xpos and x.ypos > Tile.ypos:   #Bottom Left
+        #             newBuffer.setPos(x.xpos,x.ypos)
+        #         if x.xpos > Tile.xpos and x.ypos < Tile.ypos:   #Bottom Right
+        #             newBuffer.setPos(x.xpos,x.ypos+8)
+        #     BUFFERLIST[x.xpos,x.ypos] = newBuffer
         for x in getRowNeighbor(Tile):
             newBuffer = buffer.Buffer()
+            newBuffer.setType(1)
             newBuffer.setColour(YELLOW)
             if x.blockid == 0:
                 if x.xpos > Tile.xpos:  #Right
                     newBuffer.setPos(x.xpos, x.ypos)
-                    newBuffer.setType(1)
                     # pygame.draw.rect(DISPLAYSURF, RED, (x.xpos, x.ypos, 8, 16))
                 if x.xpos < Tile.xpos:  #Left
                     newBuffer.setPos(x.xpos+8, x.ypos)
-                    newBuffer.setType(1)
                     # pygame.draw.rect(DISPLAYSURF, RED, (x.xpos+8, x.ypos, 8, 16))
+            # if (x.xpos, x.ypos) in BUFFERLIST:
+            #     if BUFFERLIST[x.xpos, x.ypos] != None:
+            #         BUFFERLIST[x.xpos, x.ypos] = newBuffer
+            # else:
             if (x.xpos, x.ypos) in BUFFERLIST:
-                if BUFFERLIST[x.xpos, x.ypos] != None:
-                    BUFFERLIST[x.xpos, x.ypos] = newBuffer
+                if isinstance(BUFFERLIST[x.xpos, x.ypos], list):
+                    BUFFERLIST[x.xpos, x.ypos].append(newBuffer)
+                else:
+                    BUFFERLIST[x.xpos, x.ypos] = [BUFFERLIST[x.xpos, x.ypos], newBuffer]
+            else:
+                BUFFERLIST[x.xpos, x.ypos] = newBuffer
         for x in getColumnNeighbor(Tile):
-            newBuffer = buffer.Buffer()
-            newBuffer.setColour(YELLOW)
-            if x.blockid == 0:
-                if x.ypos > Tile.ypos:  #Bottom
-                    newBuffer.setPos(x.xpos, x.ypos)
-                    newBuffer.setType(2)
-                    # pygame.draw.rect(DISPLAYSURF, WHITE, (x.xpos, x.ypos, 16, 8))
-                if x.ypos < Tile.ypos:  #Top
-                    newBuffer.setPos(x.xpos, x.ypos+8)
-                    newBuffer.setType(2)
-                    # pygame.draw.rect(DISPLAYSURF, WHITE, (x.xpos, x.ypos+8, 16, 8))
-            if (x.xpos, x.ypos) in BUFFERLIST:
-                if BUFFERLIST[x.xpos, x.ypos] != None:
-                    if isinstance(BUFFERLIST[x.xpos, x.ypos], list):
-                        if not 2 in [buffer.getType() for buffer in BUFFERLIST[x.xpos, x.ypos]]:
-                            BUFFERLIST[x.xpos, x.ypos].append(newBuffer)
-                    elif BUFFERLIST[x.xpos, x.ypos].getType() == 1:
-                        BUFFERLIST[x.xpos, x.ypos] = [BUFFERLIST[x.xpos, x.ypos], newBuffer]
+                newBuffer = buffer.Buffer()
+                newBuffer.setType(0)
+                newBuffer.setColour(YELLOW)
+                if x.blockid == 0:
+                    if x.ypos > Tile.ypos:  #Bottom
+                        newBuffer.setPos(x.xpos, x.ypos)
+                        # pygame.draw.rect(DISPLAYSURF, WHITE, (x.xpos, x.ypos, 16, 8))
+                    if x.ypos < Tile.ypos:  #Top
+                        newBuffer.setPos(x.xpos, x.ypos+8)
+                        # pygame.draw.rect(DISPLAYSURF, WHITE, (x.xpos, x.ypos+8, 16, 8))
+                if (x.xpos, x.ypos) in BUFFERLIST:
+                    if BUFFERLIST[x.xpos, x.ypos] != None:
+                        if isinstance(BUFFERLIST[x.xpos, x.ypos], list):
+                            if not 2 in [buffer.getType() for buffer in BUFFERLIST[x.xpos, x.ypos] if isinstance(x, classmethod)]:
+                                BUFFERLIST[x.xpos, x.ypos].append(newBuffer)
+                        elif BUFFERLIST[x.xpos, x.ypos].getType() == 1:
+                            BUFFERLIST[x.xpos, x.ypos] = [BUFFERLIST[x.xpos, x.ypos], newBuffer]
+                else:
+                    BUFFERLIST[x.xpos, x.ypos] = newBuffer
 
 def dimConvert(val):    return val//16 #Converts dimensions to // 16
 
