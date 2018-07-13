@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d1ba622c-e2c4-41e4-9f21-97d7c91dfb8f" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/buffers/buff_7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/spriteTenta.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/buffer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gametiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/gametiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/blocks/water.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/blocks/water.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spritesrc.py" beforeDir="false" afterPath="$PROJECT_DIR$/spritesrc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter.py" beforeDir="false" afterPath="$PROJECT_DIR$/starter.py" afterDir="false" />
     </list>
@@ -25,20 +18,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="spritesrc.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="spritesrc.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spritesrc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="50" column="23" lean-forward="true" selection-start-line="50" selection-start-column="23" selection-end-line="50" selection-end-column="23" />
+            <state relative-caret-position="201">
+              <caret line="56" column="27" lean-forward="true" selection-start-line="56" selection-start-column="27" selection-end-line="56" selection-end-column="27" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gametiles.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="gametiles.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gametiles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="225" column="4" lean-forward="true" selection-start-line="225" selection-start-column="4" selection-end-line="225" selection-end-column="4" />
+            <state relative-caret-position="2649">
+              <caret line="199" column="23" lean-forward="true" selection-start-line="199" selection-start-column="23" selection-end-line="199" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="spriteTenta.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/spriteTenta.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="48" lean-forward="true" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -46,8 +48,8 @@
       <file leaf-file-name="inventory.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inventory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="24" lean-forward="true" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+            <state relative-caret-position="153">
+              <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -64,8 +66,12 @@
       <file leaf-file-name="starter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/starter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1323">
-              <caret line="178" column="19" lean-forward="true" selection-start-line="178" selection-start-column="19" selection-end-line="178" selection-end-column="19" />
+            <state relative-caret-position="51">
+              <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+              <folding>
+                <element signature="e#6554#6765#0" />
+                <element signature="e#6708#6765#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -85,7 +91,6 @@
       <find>codeytiles</find>
       <find>print</find>
       <find>BLOCKLIST</find>
-      <find>PLAYER_SPEED</find>
       <find>Tile</find>
       <find>TILESIZE</find>
       <find>TILE</find>
@@ -94,6 +99,9 @@
       <find>8</find>
       <find>buffer</find>
       <find>requestedDisplay</find>
+      <find>gametiles.TILEHEIGHT</find>
+      <find>DISPLAYSURF</find>
+      <find>PLAYER_SPEED</find>
     </findStrings>
     <replaceStrings>
       <replace>codeytiles</replace>
@@ -103,6 +111,9 @@
       <replace>requestedDisplay</replace>
       <replace>BUFFERGAP</replace>
       <replace>pygame.transform.scale2x(requestedDisplay)</replace>
+      <replace>TILEHEIGHT</replace>
+      <replace>SURFACE</replace>
+      <replace>SPRITE_SPEED</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -125,9 +136,10 @@
         <option value="$PROJECT_DIR$/inventory.py" />
         <option value="$PROJECT_DIR$/buffer.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/starter.py" />
-        <option value="$PROJECT_DIR$/spritesrc.py" />
+        <option value="$PROJECT_DIR$/spriteTenta.py" />
         <option value="$PROJECT_DIR$/gametiles.py" />
+        <option value="$PROJECT_DIR$/spritesrc.py" />
+        <option value="$PROJECT_DIR$/starter.py" />
       </list>
     </option>
   </component>
@@ -244,6 +256,24 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="spriteTenta" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TileBuild" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/spriteTenta.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="spritesrc" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TileBuild" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -298,39 +328,21 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="testingplat" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="TileBuild" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testingplat.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
     <list>
       <item itemvalue="Python.starter" />
-      <item itemvalue="Python.testingplat" />
       <item itemvalue="Python.sprite" />
       <item itemvalue="Python.gametiles" />
       <item itemvalue="Python.spritesrc" />
       <item itemvalue="Python.test" />
+      <item itemvalue="Python.spriteTenta" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.spriteTenta" />
         <item itemvalue="Python.gametiles" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.spritesrc" />
         <item itemvalue="Python.sprite" />
-        <item itemvalue="Python.testingplat" />
       </list>
     </recent_temporary>
   </component>
@@ -429,12 +441,25 @@
       <option name="project" value="LOCAL" />
       <updated>1530923528025</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Successfully added Buffers,&#10;Need to work on Buffers for placed blocks">
+      <created>1530937269396</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1530937269396</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Successfully added Buffers,&#10;Need to work on Buffers for placed blocks">
+      <created>1530937305686</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1530937305686</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18018967" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -456,19 +481,19 @@
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3225108" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18018967" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3225108" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39935064" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -489,7 +514,8 @@
     <MESSAGE value="Added red tile checkers for connecting dirt" />
     <MESSAGE value="Adding support for &quot;buffer&quot; textures between water and grass blocks" />
     <MESSAGE value="Buffered Textures pre-rework" />
-    <option name="LAST_COMMIT_MESSAGE" value="Buffered Textures pre-rework" />
+    <MESSAGE value="Successfully added Buffers,&#10;Need to work on Buffers for placed blocks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Successfully added Buffers,&#10;Need to work on Buffers for placed blocks" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -497,13 +523,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/spritesrc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="25" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.py" />
     <entry file="file://$PROJECT_DIR$/tilemap.py" />
     <entry file="file://$PROJECT_DIR$/spritesrc.py">
@@ -679,24 +698,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/starter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1323">
-          <caret line="178" column="19" lean-forward="true" selection-start-line="178" selection-start-column="19" selection-end-line="178" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spritesrc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="50" column="23" lean-forward="true" selection-start-line="50" selection-start-column="23" selection-end-line="50" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inventory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="24" lean-forward="true" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+        <state relative-caret-position="153">
+          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -707,10 +712,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/starter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+          <folding>
+            <element signature="e#6554#6765#0" />
+            <element signature="e#6708#6765#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spriteTenta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="48" lean-forward="true" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gametiles.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="225" column="4" lean-forward="true" selection-start-line="225" selection-start-column="4" selection-end-line="225" selection-end-column="4" />
+        <state relative-caret-position="2649">
+          <caret line="199" column="23" lean-forward="true" selection-start-line="199" selection-start-column="23" selection-end-line="199" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spritesrc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="56" column="27" lean-forward="true" selection-start-line="56" selection-start-column="27" selection-end-line="56" selection-end-column="27" />
         </state>
       </provider>
     </entry>

@@ -3,6 +3,7 @@ import gametiles, inventory, random
 BLOCKLIST = gametiles.BLOCKLIST
 PASSABLEBLOCKS = gametiles.PASSABLEBLOCKS
 BLOCKCOUPLER = gametiles.BLOCKCOUPLER
+TILEMAP = gametiles.TILEMAP
 
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
@@ -30,7 +31,7 @@ class Player():
         if not TargetTile.blockid in PASSABLEBLOCKS:
             TargetTile.setBlockID(100)
             return False
-        else:   return True
+        else:return True
 
     def move(self, dir):
         if dir == "up" and self.checkPos(self.xpos, self.ypos - PLAYER_SPEED):
@@ -65,4 +66,7 @@ class Player():
                     BLOCKCOUPLER[d].append(tile)
                 else:
                     BLOCKCOUPLER[d] = [tile]
+            return True
+        else:
+            return False
 

@@ -1,12 +1,14 @@
-import random, buffer, operator
+import random, buffer, operator, pygame
 
 #TILE PARAMETERS DO NOT EDIT!
 TILEWIDTH = 32
 TILEHEIGHT = 32
 TILELIMIT = TILEWIDTH * TILEHEIGHT
-TILESIZE = 16
+TILESIZE = 30
 TILEGEN = (TILEWIDTH * 10) + 16
 #To get a Tile's index of block use dimConvert() x//16
+
+basetilesurf = pygame.Surface((TILESIZE * TILEWIDTH, TILESIZE * TILEHEIGHT), pygame.SRCALPHA, 32)
 
 #COLOR VARIABLES
 WHITE   =   (255,255,255)
@@ -61,23 +63,10 @@ class Tile():
 
     def setBlockID(self, ID):
         self.blockid = ID
-        
-    def moveTile(self, dir):
-        if dir == "up":
-            self.ypos -= CLOUDSPEED
-        if dir == "right":
-            self.xpos += CLOUDSPEED
-        if dir == "left":
-            self.xpos -= CLOUDSPEED
-        if dir == "down":
-            self.ypos += CLOUDSPEED
 
-def baseGridGen():
-    return [[Tile() for x in range(0, TILEHEIGHT)] for y in range(0, TILEWIDTH)]
+def baseGridGen():  return [[Tile() for x in range(0, TILEHEIGHT)] for y in range(0, TILEWIDTH)]
+
 TILEMAP = baseGridGen()
-CLOUDMAP = [[None for x in range(0,TILEHEIGHT)] for y in range(0,TILEWIDTH)]
-
-WATERLIST = []
 
 #TILE INDEX
 def initGenTile():
@@ -221,9 +210,6 @@ def waterGen(T, percent, id):
         if chanceGen in [x for x in range(0,percent)]:
             waterGen(newT,percent-WATERPERCENTDECLINE, id)
     return True
-
-# def getBuffers(Tile):
-
 
 
 
