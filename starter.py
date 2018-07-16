@@ -79,9 +79,9 @@ def drawPlayer():
     if player.orientation == 0:
         IMG = pygame.transform.flip(PlayerImage,True,False)
     elif player.orientation == 1:
-        IMG = pygame.transform.flip(PlayerImage,False,True)
+        IMG = pygame.transform.flip(PlayerImage,False,False)
     elif player.orientation == 3:
-        IMG = pygame.image.load("images/sprites/spriteWaterer.png")
+        IMG = pygame.transform.flip(PlayerImage,False,False)
     DISPLAYSURF.blit(pygame.transform.scale(IMG,(TILESIZE,TILESIZE)),(player.getPos()))
 
 def movePlayer(dir):
@@ -119,11 +119,11 @@ def drawGameMap():
 
             for buf in [x for x in BUFFERLIST[key] if x.getType() in [3, 7]]:     horimage.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
 
-            BUFFERLIST[key] = [vertimage, horimage, diagimage]
+            tempsurflist = [vertimage, horimage, diagimage]
 
-            for surface in BUFFERLIST[key]: wholeimage.blit(surface, (0,0))
-            BUFFERLIST[key] = wholeimage
-            displayTile(BUFFERLIST[key], key[0], key[1], wholesurf)
+            for surface in tempsurflist: wholeimage.blit(surface, (0,0))
+            # BUFFERLIST[key] = wholeimage
+            displayTile(wholeimage, key[0], key[1], wholesurf)
         BUFFERDRAWN = 1
         [[displayTile(TILE, TILE.xpos, TILE.ypos, basetilesurf) for TILE in row] for row in TILEMAP]  # Draw tiles
         MAPGENERATED = 1
