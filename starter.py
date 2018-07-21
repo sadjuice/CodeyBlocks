@@ -1,4 +1,4 @@
-import sys, spritesrc, gametiles, pygame, random
+import sys, spritesrc, gametiles, pygame, drawStack, buffer
 from pygame.locals import *
 
 pygame.init()
@@ -46,7 +46,7 @@ for block in gametiles.BLOCKLIST.keys():
 def displayTile(requestedDisplay, x, y, SURFACE=DISPLAYSURF):
     scale = (TILESIZE,TILESIZE)
     displayType = type(requestedDisplay)
-    if displayType in [gametiles.Tile, gametiles.buffer.Buffer, pygame.Surface, tuple]:
+    if displayType in [gametiles.Tile, buffer.Buffer, pygame.Surface, tuple]:
         if displayType == gametiles.Tile:
             try:
                 SURFACE.blit(pygame.transform.scale(BLOCKTEXTURES[requestedDisplay.blockid],scale), (x, y))  # for textured tiles
@@ -56,33 +56,30 @@ def displayTile(requestedDisplay, x, y, SURFACE=DISPLAYSURF):
                 SURFACE.blit(pygame.transform.scale(newSurf,scale), (x,y))
         elif displayType == pygame.Surface:
             SURFACE.blit(pygame.transform.scale(requestedDisplay,scale), (x,y))
-        elif displayTile == gametiles.buffer.Buffer:
+        elif displayTile == buffer.Buffer:
             BUFFERSURF.blit(pygame.transform.scale(requestedDisplay, scale), (x,y))
-
 
 #PLAYER ANIMATION TEXTURES
 ANIMATIONIMAGE = {
-    0: pygame.image.load("images/sprites/spriteBoxer.png"),
-    1: pygame.image.load("images/sprites/spriteWaterer.png")
+    0: {x:pygame.image.load(str("images/sprites/spritePlayer_"+str(x)+".png")) for x in range(0,4)},
+    1: {x:pygame.image.load("images/sprites/spriteWaterer.png") for x in range(0,4)}
 }
 
 #PLAYER VARIABLES
 player = spritesrc.Player()
 MovementDelay = 0
 cloudDelay = 0
-PlayerImage = pygame.image.load("images/sprites/playSprite.png")
 
 #PLAYER GENERATOR
 def drawPlayer():
-    IMG = PlayerImage
-    checkPlayerAnimation()
-    if player.orientation == 0:
-        IMG = pygame.transform.flip(PlayerImage,True,False)
-    elif player.orientation == 1:
-        IMG = pygame.transform.flip(PlayerImage,False,False)
-    elif player.orientation == 3:
-        IMG = pygame.transform.flip(PlayerImage,False,False)
-    DISPLAYSURF.blit(pygame.transform.scale(IMG,(TILESIZE,TILESIZE)),(player.getPos()))
+    x, y = player.getPos()
+    if player.checkPos(x, y):
+        BLOCKID = gametiles.getActiveTile(x, y).blockid
+        if BLOCKID in ANIMATIONIMAGE:
+            IMG = ANIMATIONIMAGE[BLOCKID][player.orientation]
+        else:
+            IMG = ANIMATIONIMAGE[1][player.orientation]
+        DISPLAYSURF.blit(pygame.transform.scale(IMG,(TILESIZE,TILESIZE)),(player.getPos()))
 
 def movePlayer(dir):
     global MovementDelay
@@ -91,42 +88,75 @@ def movePlayer(dir):
         player.move(dir)
         MovementDelay = 0
 
-def checkPlayerAnimation():
-    global PlayerImage
-    x, y = player.getPos()
-    if player.checkPos(x,y):
-        BLOCKID = gametiles.getActiveTile(x,y).blockid
-        try:    PlayerImage = ANIMATIONIMAGE[BLOCKID]
-        except: PlayerImage = ANIMATIONIMAGE[0]
+# def checkPlayerAnimation():
+#     global PlayerImage
+#     x, y = player.getPos()
+#     if player.checkPos(x,y):
+#         BLOCKID = gametiles.getActiveTile(x,y).blockid
+
+
+def bufferDisplayCreator(listVar):
+    global wholesurf
+    for key in listVar.keys():
+        diagimage = pygame.image.load("images/buffers/blank.png")
+        mask = pygame.Surface((TILESIZE, TILESIZE), pygame.SRCALPHA)
+        mask.fill((255,255,255))
+        mask.set_alpha(255)
+        displayTile(wholesurf, key[0], key[1], mask)
+        vertimage = diagimage.copy()
+        horimage = diagimage.copy()
+        wholeimage = diagimage.copy()
+
+        for buf in [x for x in listVar[key] if x.getType() in [4, 6]]:    diagimage.blit(
+            pygame.image.load(buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
+
+        for buf in [x for x in listVar[key] if x.getType() in [1, 5]]:    vertimage.blit(
+            pygame.image.load(buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
+
+        for buf in [x for x in listVar[key] if x.getType() in [3, 7]]:     horimage.blit(
+            pygame.image.load(buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
+
+        tempsurflist = [vertimage, horimage, diagimage]
+
+        for surface in tempsurflist: wholeimage.blit(surface, (0, 0))
+
+        displayTile(wholeimage, key[0], key[1], wholesurf)
 
 #TILE GENERATOR
 def drawGameMap():
-    global MAPGENERATED, MAPUNCHANGED, BLOCKCOUPLER, BUFFERDRAWN, wholesurf
+    global MAPGENERATED, MAPUNCHANGED, BLOCKCOUPLER, BUFFERDRAWN, wholesurf, BUFFERLIST
     if MAPGENERATED == 0:   #Checks if map has been generated
         BUFFERDRAWN = 0
         wholesurf = pygame.Surface((TILESIZE * TILEWIDTH, TILESIZE * TILEHEIGHT), pygame.SRCALPHA, 32)
         gametiles.initGenTile()
-        BUFFERLIST = gametiles.BUFFERLIST
-        for key in BUFFERLIST.keys():
-            diagimage = pygame.image.load("images/buffers/blank.png")
-            vertimage = diagimage.copy()
-            horimage = diagimage.copy()
-            wholeimage = diagimage.copy()
-
-            for buf in [x for x in BUFFERLIST[key] if x.getType() in [4, 6]]:    diagimage.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
-
-            for buf in [x for x in BUFFERLIST[key] if x.getType() in [1,5]]:    vertimage.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
-
-            for buf in [x for x in BUFFERLIST[key] if x.getType() in [3, 7]]:     horimage.blit(pygame.image.load(gametiles.buffer.BUFFERIMAGES[buf.type]), (buf.xadd, buf.yadd))
-
-            tempsurflist = [vertimage, horimage, diagimage]
-
-            for surface in tempsurflist: wholeimage.blit(surface, (0,0))
-            # BUFFERLIST[key] = wholeimage
-            displayTile(wholeimage, key[0], key[1], wholesurf)
+        bufferDisplayCreator(gametiles.BUFFERLIST)
         BUFFERDRAWN = 1
         [[displayTile(TILE, TILE.xpos, TILE.ypos, basetilesurf) for TILE in row] for row in TILEMAP]  # Draw tiles
         MAPGENERATED = 1
+    else:
+        if len(drawStack.stackToDraw.stack) > 0:
+            # print(drawStack.stackToDraw.stack)
+            superNeighbourList = []
+            tempDict = {}
+            for item in drawStack.stackToDraw.stack:
+                neighbourList = gametiles.getRowNeighbor(item)+gametiles.getColumnNeighbor(item)+[item]
+                print(neighbourList)
+                for tiles in neighbourList:
+                    tiles.setBlockID(100)
+                    displayTile(tiles, item.xpos, item.ypos, basetilesurf)
+                    tempBuffer = buffer.Buffer()
+                    tempBuffer.setPos(tiles.xpos,tiles.ypos)
+                    if (tiles.xpos,tiles.ypos) in tempDict.keys():  tempDict[(tiles.xpos,tiles.ypos)].append(tempBuffer)
+                    else:   tempDict[(tiles.xpos, tiles.ypos)] = [tempBuffer]
+                [superNeighbourList.append(x) for x in neighbourList]
+                print(tempDict)
+            listOfFreshBuffers = gametiles.grassWaterBuffer(tempDict, superNeighbourList)
+            for x in listOfFreshBuffers.keys():
+                buf = tempDict[x][0]
+                gametiles.BUFFERLIST[(buf.x, buf.y)] = buf
+            bufferDisplayCreator(listOfFreshBuffers)
+
+            drawStack.stackToDraw.clearStack()
     DISPLAYSURF.blit(basetilesurf, (0,0))
     DISPLAYSURF.blit(wholesurf,(0,0))
 
@@ -161,7 +191,7 @@ while True: # main game loop
                 TILE = gametiles.getActiveTile(x,y)
                 for Tile in gametiles.getSurrounding(TILE):
                     Tile.setBlockID(100)
-                    MAPGENERATED = 0
+                    displayTile(Tile,Tile.xpos,Tile.ypos,wholesurf)
             if event.key == pygame.K_SPACE: player.grabTile()
             if event.key == pygame.K_p:
                 player.placeTile()

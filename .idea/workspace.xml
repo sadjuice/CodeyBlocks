@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d1ba622c-e2c4-41e4-9f21-97d7c91dfb8f" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/drawStack.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gametiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/gametiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spriteTenta.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/spritesrc.py" beforeDir="false" afterPath="$PROJECT_DIR$/spritesrc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter.py" beforeDir="false" afterPath="$PROJECT_DIR$/starter.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,8 +21,8 @@
       <file leaf-file-name="spritesrc.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spritesrc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1037">
-              <caret line="61" column="28" selection-start-line="61" selection-start-column="28" selection-end-line="61" selection-end-column="28" />
+            <state relative-caret-position="170">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -27,26 +30,17 @@
       <file leaf-file-name="gametiles.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gametiles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="164" column="21" selection-start-line="164" selection-start-column="21" selection-end-line="164" selection-end-column="21" />
+            <state relative-caret-position="272">
+              <caret line="70" column="39" lean-forward="true" selection-start-line="70" selection-start-column="39" selection-end-line="70" selection-end-column="39" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="spriteTenta.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spriteTenta.py">
+      <file leaf-file-name="drawStack.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/drawStack.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="48" lean-forward="true" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="inventory.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/inventory.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            <state>
+              <caret column="15" selection-start-column="15" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -54,8 +48,8 @@
       <file leaf-file-name="buffer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/buffer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+            <state relative-caret-position="255">
+              <caret line="15" column="24" lean-forward="true" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -63,8 +57,11 @@
       <file leaf-file-name="starter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/starter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="124" column="42" lean-forward="true" selection-start-line="124" selection-start-column="42" selection-end-line="124" selection-end-column="42" />
+            <state relative-caret-position="98">
+              <caret line="40" column="12" lean-forward="true" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -87,7 +84,6 @@
       <find>Tile</find>
       <find>TILESIZE</find>
       <find>TILE</find>
-      <find>BUFFERLIST</find>
       <find>12</find>
       <find>8</find>
       <find>buffer</find>
@@ -95,6 +91,10 @@
       <find>gametiles.TILEHEIGHT</find>
       <find>DISPLAYSURF</find>
       <find>PLAYER_SPEED</find>
+      <find>Tile()</find>
+      <find>BUFFERLIST</find>
+      <find>gametiles.buffer</find>
+      <find>wholesurf</find>
     </findStrings>
     <replaceStrings>
       <replace>codeytiles</replace>
@@ -107,6 +107,8 @@
       <replace>TILEHEIGHT</replace>
       <replace>SURFACE</replace>
       <replace>SPRITE_SPEED</replace>
+      <replace>listVar</replace>
+      <replace>buffer</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -130,14 +132,15 @@
         <option value="$PROJECT_DIR$/buffer.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/spriteTenta.py" />
-        <option value="$PROJECT_DIR$/spritesrc.py" />
+        <option value="$PROJECT_DIR$/drawStack.py" />
         <option value="$PROJECT_DIR$/starter.py" />
+        <option value="$PROJECT_DIR$/spritesrc.py" />
         <option value="$PROJECT_DIR$/gametiles.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="133" />
+    <option name="x" value="-34" />
     <option name="y" value="-8" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
@@ -455,18 +458,26 @@
       <option name="project" value="LOCAL" />
       <updated>1531487695750</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Pre-code assistant">
+      <created>1531711243069</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1531711243069</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18018967" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.18018967" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3225108" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3225108" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -515,7 +526,8 @@
     <MESSAGE value="Adding support for &quot;buffer&quot; textures between water and grass blocks" />
     <MESSAGE value="Buffered Textures pre-rework" />
     <MESSAGE value="Successfully added Buffers,&#10;Need to work on Buffers for placed blocks" />
-    <option name="LAST_COMMIT_MESSAGE" value="Successfully added Buffers,&#10;Need to work on Buffers for placed blocks" />
+    <MESSAGE value="Pre-code assistant" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pre-code assistant" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -523,7 +535,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/main.py" />
     <entry file="file://$PROJECT_DIR$/tilemap.py" />
     <entry file="file://$PROJECT_DIR$/spritesrc.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -698,45 +709,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/buffer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/spriteTenta.py" />
     <entry file="file://$PROJECT_DIR$/inventory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="442">
+          <caret line="26" column="30" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spritesrc.py">
+    <entry file="file://$PROJECT_DIR$/buffer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="61" column="28" selection-start-line="61" selection-start-column="28" selection-end-line="61" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spriteTenta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="48" lean-forward="true" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
+        <state relative-caret-position="255">
+          <caret line="15" column="24" lean-forward="true" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/starter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="124" column="42" lean-forward="true" selection-start-line="124" selection-start-column="42" selection-end-line="124" selection-end-column="42" />
+        <state relative-caret-position="98">
+          <caret line="40" column="12" lean-forward="true" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spritesrc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/drawStack.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="15" selection-start-column="15" selection-end-column="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gametiles.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="164" column="21" selection-start-line="164" selection-start-column="21" selection-end-line="164" selection-end-column="21" />
+        <state relative-caret-position="272">
+          <caret line="70" column="39" lean-forward="true" selection-start-line="70" selection-start-column="39" selection-end-line="70" selection-end-column="39" />
         </state>
       </provider>
     </entry>

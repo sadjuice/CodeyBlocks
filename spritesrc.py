@@ -1,8 +1,7 @@
-import gametiles, inventory, random
+import gametiles, inventory, random, drawStack
 
 BLOCKLIST = gametiles.BLOCKLIST
 PASSABLEBLOCKS = gametiles.PASSABLEBLOCKS
-BLOCKCOUPLER = gametiles.BLOCKCOUPLER
 TILEMAP = gametiles.TILEMAP
 
 #COLOR VARIABLES
@@ -54,18 +53,24 @@ class Player():
         self.inv.addItem(tile.blockid, 1)
 
     def placeTile(self):
-        global BLOCKCOUPLER
+        global BLOCKCOUPLER, NewPlacedTiles
+        BLOCKCOUPLER = gametiles.BLOCKCOUPLER
         inv = self.inv
         tile = gametiles.getActiveTile(self.xpos, self.ypos)
         if not inv.isEmpty():
             d = random.choice(list(inv.grabList().keys()))
             if inv.inInv(d):
-                inv.removeItem(d, 1)
-                tile.setBlockID(d)
-                if d in BLOCKCOUPLER.keys():
-                    BLOCKCOUPLER[d].append(tile)
-                else:
-                    BLOCKCOUPLER[d] = [tile]
+                try:
+                    BLOCKCOUPLER[tile.getBlockID()].remove(tile)
+                    inv.removeItem(d, 1)
+                    tile.setBlockID(d)
+                    if d in BLOCKCOUPLER.keys():
+                        BLOCKCOUPLER[d].append(tile)
+                    else:
+                        BLOCKCOUPLER[d] = [tile]
+                    drawStack.stackToDraw.addToStack(tile)
+                except:
+                    return False
             return True
         else:
             return False
